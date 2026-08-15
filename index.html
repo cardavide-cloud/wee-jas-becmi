@@ -1,0 +1,1917 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#210d17">
+<title>D&D Scatola Rossa — Chierico di Wee Jas — v1 BETA TEST</title>
+<style>
+:root{
+ --bg:#170a11;--bg2:#2a111e;--ruby:#8d1735;--ruby2:#b82b4b;--gold:#c39a4d;
+ --paper:#f0e1bf;--paper2:#e2c99b;--ink:#28171f;--cream:#fff8e7;
+ --green:#3d7e3b;--red:#a52b2b;--muted:#6c5044;--line:#a88657;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:radial-gradient(circle at 50% -10%,#4b1b30 0,#170a11 55%);color:var(--ink);font-family:Georgia,serif}
+body{padding:8px}
+button,input,textarea{font-family:Georgia,serif}
+.app{max-width:1180px;margin:auto}
+.header{background:linear-gradient(135deg,#351322,#160810);border:2px solid var(--gold);border-radius:17px 17px 0 0;color:#fff;padding:10px;display:flex;align-items:center;gap:12px;box-shadow:0 5px 20px #0008}
+.skull{width:58px;height:58px;flex:none;border:2px solid var(--gold);border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle,#9d183b 0 36%,#2b101c 38%);font-size:29px}
+.title{font-size:clamp(19px,3.3vw,32px);font-weight:bold;letter-spacing:1.5px}
+.subtitle{font-size:11px;color:#e7c986;margin-top:3px}
+.tabs{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;padding:6px;background:#10070c;border:1px solid #6f4b2c;border-top:0;border-radius:0 0 16px 16px;position:sticky;top:0;z-index:30}
+.tab{border:1px solid #7d5b36;background:#29131f;color:#edd59d;border-radius:9px;padding:10px 5px;font-weight:bold;font-size:11px;cursor:pointer}
+.tab.active{background:var(--ruby);color:#fff;border-color:#e4b15a}
+.screen{display:none;background:var(--paper);border:2px solid var(--gold);border-top:0;border-radius:0 0 14px 14px;padding:11px;box-shadow:0 6px 25px #0005}
+.screen.active{display:block}
+.section{background:linear-gradient(90deg,#4c2335,#2e1521);color:#f6dfaa;border:1px solid var(--gold);border-radius:9px;padding:7px 10px;margin:8px 0;font-weight:bold;font-size:12px;letter-spacing:.7px}
+.grid{display:grid;gap:8px;min-width:0}
+.identity{grid-template-columns:2fr 1fr .6fr 1.5fr}
+.basic4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.stats{grid-template-columns:repeat(6,minmax(0,1fr))}
+.field label,.stat label{display:block;text-align:center;font-size:10px;font-weight:bold;margin-bottom:3px;color:#51392e}
+input,textarea{width:100%;min-width:0;border:1.5px solid #9a764e;border-radius:7px;background:var(--cream);color:var(--ink);padding:8px;font-size:15px;outline:none}
+input:focus,textarea:focus{border-color:var(--ruby2);box-shadow:0 0 0 2px #8d173522}
+.stat{background:linear-gradient(#f7ead0,#e7d2a7);border:1.5px solid var(--gold);border-radius:11px;padding:7px}
+.stat input{font-size:20px;font-weight:bold;text-align:center}
+.mod{margin-top:5px;background:#3a1e2b;color:#fff;border-radius:6px;padding:5px;text-align:center;font-weight:bold;font-size:16px}
+.columns{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:9px}
+.combatgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
+.hp{display:flex;gap:8px;align-items:center;justify-content:center;background:var(--paper2);border:1.5px solid var(--gold);border-radius:10px;padding:8px}
+.hp button{width:46px;height:46px;border-radius:50%;border:2px solid var(--ruby);background:var(--cream);color:var(--ruby);font:bold 27px Georgia;cursor:pointer}
+.hp input{width:85px;font-size:24px;font-weight:bold;text-align:center}
+.box{background:#f7edd7;border:1px solid var(--line);border-radius:9px;padding:8px}
+.tablewrap{width:100%;overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;background:#fff8e7}
+th,td{border:1px solid #c7aa78;padding:6px;text-align:center;font-size:11px}
+th{background:#4b2637;color:#f6dfaa}
+.thaco{min-width:650px;table-layout:fixed}
+.highlight{background:#ead09b!important;color:#2a1720;font-weight:bold}
+.savegrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}
+.tiny{font-size:10px;color:var(--muted);text-align:center;margin:5px 0}
+.turntable{min-width:1180px;table-layout:fixed}.turntable th:first-child{width:125px}.turntable td,.turntable th{padding:5px 4px}
+.turntable td,.turntable th{padding:6px 4px}
+.money{grid-template-columns:repeat(5,minmax(0,1fr))}
+.spelllevels{display:flex;gap:5px;flex-wrap:wrap}
+.levelbtn{border:1px solid #98764c;background:#ead5aa;border-radius:8px;padding:8px 12px;font-weight:bold;cursor:pointer}
+.levelbtn.active{background:var(--ruby);color:#fff;border-color:#e0ac54}
+.slots{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;margin:8px 0}
+.slot{background:#e9d5ad;border:1px solid #ad8958;border-radius:7px;text-align:center;padding:6px;font-size:10px}
+.slot strong{display:block;font-size:16px}
+.spells{display:grid;gap:5px}
+.spell{display:grid;grid-template-columns:minmax(170px,1.25fr) minmax(110px,.8fr) minmax(0,2fr);background:#f7edd7;border:1px solid #c4a778;border-radius:8px;overflow:hidden;min-height:48px}
+.spell .name{padding:9px;font-weight:bold;line-height:1.25;overflow-wrap:anywhere}
+.spell .desc{padding:9px;font-size:11px;line-height:1.35;color:#5c4639;overflow-wrap:anywhere}
+.switch{align-self:center;justify-self:center;border:0;border-radius:7px;padding:8px 6px;min-width:96px;font:bold 10px Georgia;line-height:1.15;white-space:normal;cursor:pointer}
+.prep{background:var(--green);color:#fff}.notprep{background:var(--red);color:#fff}
+.savesTable{table-layout:fixed}
+.savesTable th:first-child{width:31%}
+.savesTable th:nth-child(2){width:10%}
+.savesTable th:nth-child(3){width:15%}
+.savesTable th:nth-child(4){width:44%}
+.savesTable td,.savesTable th{padding:5px}
+.savesTable input{border:0;background:transparent;border-radius:4px;padding:5px}
+.savesTable .saveNum{width:48px;min-width:48px;max-width:48px;text-align:center;font-weight:bold;font-size:16px;padding:5px 2px}
+.savesTable td:nth-child(2),.savesTable td:nth-child(3){text-align:center}
+.equip{table-layout:fixed}
+.equip th:nth-child(1){width:35%}.equip th:nth-child(2){width:12%}.equip th:nth-child(3){width:13%}.equip th:nth-child(4){width:40%}
+.equip td{height:48px;vertical-align:top}.equip input{border:0;background:transparent;padding:4px;text-align:left}
+.add{margin-top:7px;border:1px solid var(--gold);background:#3d2030;color:#ffe9b3;border-radius:7px;padding:9px 13px;font-weight:bold;cursor:pointer}
+.notearea{min-height:130px;text-align:left}
+.footer{font-size:10px;text-align:center;color:var(--muted);padding:9px}
+@media(max-width:800px){
+ .tabs{grid-template-columns:repeat(5,minmax(0,1fr))}
+ .identity,.basic4{grid-template-columns:1fr 1fr}
+ .stats{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .columns{grid-template-columns:1fr}
+ .savegrid{grid-template-columns:1fr 1fr}
+ .spell{grid-template-columns:minmax(135px,1fr) minmax(105px,.85fr)}
+ .spell .desc{grid-column:1/-1;border-top:1px solid #d0b989}
+}
+@media(max-width:480px){
+ body{padding:4px}.tabs{gap:3px}.tab{font-size:9px;padding:9px 2px}
+ .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .identity,.basic4,.combatgrid{grid-template-columns:1fr 1fr}
+ .slots{grid-template-columns:repeat(4,minmax(0,1fr))}
+ .skull{width:48px;height:48px;font-size:24px}
+}
+
+.faithPanels{display:grid;grid-template-columns:1fr 1fr;gap:9px;align-items:stretch}
+.faithPanel{min-width:0}
+@media(max-width:560px){.faithPanels{grid-template-columns:1fr}}
+.spellTop{display:grid;grid-template-columns:150px 1fr;gap:8px;align-items:center}.compactLevel input{text-align:center;font-weight:bold}.spellRule{background:#f7edd7;border:1px solid var(--line);border-radius:8px;padding:9px;font-size:11px;line-height:1.35}.preparedSummary{display:grid;gap:5px;background:#f7edd7;border:1px solid var(--line);border-radius:9px;padding:7px}
+.slotLevelMain{display:flex;flex-direction:column;gap:2px}
+.prepCount{font-size:9px;color:#6f5a45;font-weight:normal}
+.slotControls{display:flex;align-items:center;gap:4px;justify-content:flex-end}
+.slotBtn{width:22px;height:22px;border:1px solid #b28d58;border-radius:5px;background:#f7edd7;color:#6f1630;font:bold 14px Georgia;line-height:18px;padding:0;cursor:pointer}
+.slotBtn:active{transform:scale(.95)}
+.slotLevelRow{display:grid;grid-template-columns:75px minmax(80px,1fr) auto;gap:7px;align-items:center;background:#ead5ad;border:1px solid #ad8958;border-radius:7px;padding:6px}.slotLevelName{font-weight:bold;color:#6f1630;font-size:11px}.slotDots{font-size:24px;line-height:24px;letter-spacing:4px;white-space:nowrap;color:#000}.slotDotUsed{color:#000}.slotDotFree{color:#000}.slotStatus{font-size:10px;font-weight:bold;text-align:right}.slotExhausted{color:#a52b2b}.slotAvailable{color:#4d8745}.preparedNames{font-size:10px;padding:2px 4px 5px 82px;color:#4c5d43}.preparedSpell{display:inline-block;background:#e4efd9;border:1px solid #7aa66f;border-radius:5px;padding:3px 6px;margin:1px 2px;cursor:pointer}.spellFilter{font-size:10px;color:var(--muted);margin:4px 0}.spell{grid-template-columns:minmax(150px,1.05fr) 100px minmax(0,2.4fr)}.spell .desc{font-size:10.5px}.spellMeta{font-size:10px;color:#6c5044;margin-top:4px;line-height:1.35}.spellSummary{font-size:11px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.spellSave{font-size:9.5px;color:#5c2638;font-weight:bold;margin-top:3px;line-height:1.2}
+.spell .name{cursor:pointer}.spell .name.usedSpell{color:#8b5b22}.spell .name.preparedSpellName{color:#4d8745}.switch{min-width:90px}.restBtn{display:block;width:100%;margin-top:7px;text-align:center}
+@media(max-width:800px){.spellTop{grid-template-columns:120px 1fr}.spell{grid-template-columns:minmax(135px,1fr) 95px 65px}.spell .desc{grid-column:1/-1;border-top:1px solid #d0b989}.slotLevelRow{grid-template-columns:65px minmax(60px,1fr) auto}.preparedNames{padding-left:72px}}
+@media(max-width:480px){.spellTop{grid-template-columns:1fr}.spell{grid-template-columns:minmax(125px,1fr) 88px 60px}.slotLevelRow{grid-template-columns:55px minmax(50px,1fr) auto}.preparedNames{padding-left:62px}}
+
+.hpPanel{background:var(--paper2);border:1.5px solid var(--gold);border-radius:10px;padding:9px}
+.hpLabel{text-align:center;font-size:11px;font-weight:bold;color:#6f1630;margin-bottom:3px}
+.hp{border:0;background:transparent;padding:0}
+.hp input{width:120px;font-size:30px;height:54px}
+.hp button{width:48px;height:48px}
+.hpMax{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:6px;font-size:10px;font-weight:bold;color:#51392e}
+.hpMax input{width:85px;text-align:center;font-weight:bold;font-size:15px;padding:5px}
+.equip th:nth-child(4){width:40%}
+.equip td{height:48px;vertical-align:top}
+.equip td:nth-child(4) input{white-space:normal}
+
+/* =========================================================
+   WEE JAS — DARK FANTASY ORNATE UI
+   SOLO PRESENTAZIONE / CSS — LOGICA INVARIATA
+   ========================================================= */
+
+:root{
+  --bg:#070706;
+  --bg2:#100d0b;
+  --panel:#11100e;
+  --panel2:#171411;
+  --panel3:#211b15;
+  --ink:#f1e6d2;
+  --muted:#c7b89d;
+  --gold:#a98243;
+  --gold2:#d2ad68;
+  --gold3:#71562d;
+  --ruby:#7e171c;
+  --ruby2:#b62b2c;
+  --redtext:#e24a3e;
+  --line:#604a2b;
+  --input:#0d0c0b;
+  --green:#527f4e;
+  --green2:#6e9e67;
+}
+
+html,body{
+  background:
+    radial-gradient(ellipse at 50% -15%,rgba(117,20,24,.20),transparent 36%),
+    radial-gradient(ellipse at 0% 50%,rgba(170,126,48,.08),transparent 28%),
+    radial-gradient(ellipse at 100% 50%,rgba(170,126,48,.06),transparent 28%),
+    #070706 !important;
+  color:var(--ink) !important;
+}
+
+body{
+  padding:14px;
+  font-family:Georgia,"Times New Roman",serif;
+  position:relative;
+}
+
+/* Filigrana generale: volutamente tenue per non compromettere la lettura */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  opacity:.055;
+  background:
+    radial-gradient(circle at 12% 18%,transparent 0 60px,rgba(205,169,99,.9) 61px,transparent 63px),
+    radial-gradient(circle at 88% 82%,transparent 0 72px,rgba(205,169,99,.7) 73px,transparent 75px),
+    repeating-radial-gradient(ellipse at 50% 50%,transparent 0 90px,rgba(178,139,71,.18) 91px 92px,transparent 93px 180px);
+}
+
+/* Cornice esterna */
+.app{
+  position:relative;
+  z-index:1;
+  max-width:1240px;
+  margin:auto;
+  padding:7px;
+  background:
+    linear-gradient(135deg,#251c12,#080807 12%,#15110d 50%,#080807 88%,#251c12);
+  border:1px solid var(--gold);
+  box-shadow:
+    0 0 0 2px #1b140d,
+    0 0 0 4px #4a3820,
+    0 18px 55px rgba(0,0,0,.82);
+}
+
+/* Quattro piccoli motivi da cornice */
+.app::before,.app::after{
+  content:"✦";
+  position:absolute;
+  z-index:10;
+  color:var(--gold2);
+  font-size:19px;
+  text-shadow:0 1px 4px #000;
+  pointer-events:none;
+}
+.app::before{top:4px;left:7px}
+.app::after{top:4px;right:7px}
+
+/* Testata */
+.header{
+  min-height:78px;
+  position:relative;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 20% 50%,rgba(124,23,28,.32),transparent 30%),
+    linear-gradient(105deg,#19130e,#080807 52%,#17100d);
+  border:1px solid var(--gold);
+  border-radius:3px;
+  color:#f8ecd7;
+  box-shadow:inset 0 0 0 1px rgba(222,183,105,.08),0 5px 18px rgba(0,0,0,.65);
+}
+
+.header::before,.header::after{
+  content:"❖";
+  position:absolute;
+  top:8px;
+  color:var(--gold2);
+  font-size:13px;
+  opacity:.9;
+}
+.header::before{left:11px}.header::after{right:11px}
+
+.skull{
+  width:61px;height:61px;
+  border:1px solid var(--gold2);
+  border-radius:50%;
+  background:
+    radial-gradient(circle,#17110d 0 31%,#6e171a 32% 37%,#0a0908 39% 100%);
+  box-shadow:inset 0 0 0 3px #271b10,0 0 12px rgba(0,0,0,.65);
+  font-size:27px;
+}
+
+.title{
+  font-size:clamp(20px,3.4vw,34px);
+  letter-spacing:2px;
+  text-shadow:0 2px 4px #000;
+  color:#f3dfbd;
+}
+.subtitle{
+  color:#d0aa62 !important;
+  letter-spacing:1.2px;
+}
+
+/* Linguette: effetto placchetta metallica incisa */
+.tabs{
+  background:#090807 !important;
+  border:1px solid var(--gold3) !important;
+  border-top:0 !important;
+  border-radius:0 !important;
+  gap:4px;
+  padding:6px 7px 8px;
+  box-shadow:inset 0 -2px 0 #050504,0 6px 13px rgba(0,0,0,.55);
+}
+
+.tab{
+  position:relative;
+  overflow:hidden;
+  border:1px solid #806236 !important;
+  border-radius:3px !important;
+  background:
+    linear-gradient(180deg,#2a2118,#0f0d0b 55%,#21180f) !important;
+  color:#d8c29a !important;
+  padding:11px 7px;
+  text-transform:uppercase;
+  letter-spacing:.4px;
+  text-shadow:0 1px 3px #000;
+  box-shadow:
+    inset 0 1px rgba(245,220,168,.12),
+    inset 0 -2px rgba(0,0,0,.55),
+    0 2px 6px rgba(0,0,0,.65);
+}
+
+.tab::before{
+  content:"◆";
+  position:absolute;
+  left:5px;
+  top:50%;
+  transform:translateY(-50%);
+  color:#b88e4d;
+  font-size:7px;
+}
+.tab::after{
+  content:"◆";
+  position:absolute;
+  right:5px;
+  top:50%;
+  transform:translateY(-50%);
+  color:#b88e4d;
+  font-size:7px;
+}
+
+.tab.active{
+  background:
+    linear-gradient(180deg,#76191d,#3c0e11 55%,#1d090a) !important;
+  border-color:#c39a4d !important;
+  color:#fff0d0 !important;
+  box-shadow:
+    inset 0 0 14px rgba(182,43,44,.26),
+    inset 0 1px rgba(255,222,164,.15),
+    0 0 8px rgba(163,118,50,.15);
+}
+
+/* Schermata: pannello quasi nero */
+.screen{
+  background:
+    linear-gradient(rgba(14,13,11,.975),rgba(10,10,9,.985)) !important;
+  border:1px solid var(--gold) !important;
+  border-top:0 !important;
+  border-radius:0 0 4px 4px !important;
+  color:var(--ink) !important;
+  padding:12px;
+  box-shadow:inset 0 0 45px rgba(0,0,0,.38),0 8px 30px rgba(0,0,0,.7);
+}
+
+/* Titoli di sezione: placchette rosso rubino + oro */
+.section{
+  position:relative;
+  background:
+    linear-gradient(90deg,#1b0b0c 0%,#651417 12%,#3a0d10 50%,#651417 88%,#1b0b0c 100%) !important;
+  color:#f1d39b !important;
+  border:1px solid var(--gold) !important;
+  border-radius:2px !important;
+  padding:8px 28px !important;
+  margin:10px 0 8px !important;
+  letter-spacing:1px !important;
+  text-align:center;
+  text-shadow:0 2px 3px #000;
+  box-shadow:
+    inset 0 1px rgba(255,220,166,.10),
+    inset 0 -2px rgba(0,0,0,.45),
+    0 3px 8px rgba(0,0,0,.55);
+}
+
+.section::before,.section::after{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  color:var(--gold2);
+  font-size:10px;
+}
+.section::before{content:"❖";left:9px}
+.section::after{content:"❖";right:9px}
+
+/* Pannelli / campi */
+.field,.box,.panel,.card,.tablewrap,.faithPanel,.spellRule,.preparedSummary{
+  background:
+    linear-gradient(145deg,rgba(34,29,23,.97),rgba(12,11,10,.99)) !important;
+  border-color:#6d532f !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(222,180,96,.035),
+    inset 0 0 24px rgba(0,0,0,.25),
+    0 4px 12px rgba(0,0,0,.4);
+}
+
+.field label,.stat label,.hpLabel,.tiny,.spellFilter,.spellMeta{
+  color:#cdbd9f !important;
+  text-shadow:0 1px 2px #000;
+}
+
+/* Caratteristiche */
+.stat{
+  background:
+    linear-gradient(145deg,#2b241c,#11100e) !important;
+  border:1px solid #8a6a3b !important;
+  box-shadow:inset 0 0 13px rgba(0,0,0,.55),0 3px 9px rgba(0,0,0,.45);
+}
+.stat input{
+  background:#0b0a09 !important;
+  color:#f7e7c7 !important;
+}
+.mod{
+  background:linear-gradient(#6d171a,#2d0b0d) !important;
+  border:1px solid #9b703b;
+  color:#ffe7bf !important;
+}
+
+/* Campi input */
+input,textarea{
+  background:
+    linear-gradient(180deg,#11100e,#090908) !important;
+  color:#f1e7d6 !important;
+  border:1px solid #705533 !important;
+  border-radius:3px !important;
+  box-shadow:inset 0 2px 7px rgba(0,0,0,.68) !important;
+}
+input::placeholder,textarea::placeholder{
+  color:#80735f !important;
+}
+input:focus,textarea:focus{
+  border-color:#c79d57 !important;
+  box-shadow:0 0 0 1px rgba(199,157,87,.22),inset 0 2px 7px rgba(0,0,0,.68) !important;
+}
+
+/* Pulsanti: targa fantasy */
+button,.add,.slotBtn{
+  background:
+    linear-gradient(180deg,#4a3824,#21180f 52%,#302216) !important;
+  color:#f1dfbd !important;
+  border:1px solid #a27a40 !important;
+  border-radius:3px !important;
+  box-shadow:
+    inset 0 1px rgba(255,231,184,.15),
+    inset 0 -2px rgba(0,0,0,.5),
+    0 3px 7px rgba(0,0,0,.55) !important;
+  text-shadow:0 1px 3px #000;
+}
+button:hover,.add:hover,.slotBtn:hover{
+  background:linear-gradient(180deg,#654a2a,#2e1e12) !important;
+  border-color:#d0aa63 !important;
+}
+button:active,.add:active,.slotBtn:active{
+  transform:translateY(1px);
+}
+.add{
+  padding:9px 15px !important;
+}
+
+/* HP: il punto più importante deve sembrare una placca */
+.hpPanel{
+  background:
+    radial-gradient(circle at 50% 35%,rgba(130,26,27,.17),transparent 50%),
+    linear-gradient(145deg,#2a2118,#0c0b0a) !important;
+  border:1px solid #a27a40 !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(220,178,94,.06),
+    inset 0 0 22px rgba(0,0,0,.65),
+    0 5px 15px rgba(0,0,0,.6);
+}
+.hpLabel{color:#e1493c !important;font-weight:bold}
+.hp{
+  background:transparent !important;
+}
+.hp input{
+  background:#080807 !important;
+  color:#fff0d0 !important;
+  font-size:31px;
+  border-color:#9b733d !important;
+}
+.hp button{
+  background:linear-gradient(#4d1719,#18090a) !important;
+  color:#f1d4a0 !important;
+  border-color:#b98947 !important;
+}
+
+/* Tabelle: nere, leggibili, bordi oro */
+.tablewrap{
+  overflow-x:auto;
+}
+table{
+  background:#0c0b0a !important;
+  color:#eadfce !important;
+}
+th{
+  background:linear-gradient(#34291d,#17130f) !important;
+  color:#e2bd78 !important;
+  border-color:#66502f !important;
+  text-shadow:0 1px 2px #000;
+}
+td{
+  background:rgba(17,15,12,.93) !important;
+  color:#e8dfd0 !important;
+  border-color:#493923 !important;
+}
+tr:hover td{
+  background:#20180f !important;
+}
+.highlight{
+  background:#6d1719 !important;
+  color:#ffe4b9 !important;
+  box-shadow:inset 0 0 0 1px #bd8f4b;
+}
+
+/* Fede / Scacciare: tabella protagonista */
+.turntable th,.turntable td{
+  font-size:11px;
+}
+.turntable th:first-child{
+  color:#d9b574 !important;
+}
+
+/* Incantesimi */
+.levelbtn{
+  background:linear-gradient(#392c1d,#17120e) !important;
+  color:#ddc18d !important;
+  border-color:#816239 !important;
+}
+.levelbtn.active{
+  background:linear-gradient(#74181c,#2e0b0d) !important;
+  color:#fff0d1 !important;
+  border-color:#c59a50 !important;
+}
+
+.slotLevelRow,.slot{
+  background:linear-gradient(#2a2117,#11100e) !important;
+  border-color:#765a32 !important;
+}
+.slotLevelName{
+  color:#dfb96f !important;
+}
+.slotDots,.slotDotUsed,.slotDotFree{
+  color:#000 !important;
+  text-shadow:0 0 0 #000;
+  -webkit-text-stroke:1px #8c744f;
+}
+.slotStatus{
+  color:#d6c4a6 !important;
+}
+.slotAvailable{
+  color:#75a36d !important;
+}
+.slotExhausted{
+  color:#df5147 !important;
+}
+
+.spell{
+  background:linear-gradient(145deg,#211b15,#0d0c0b) !important;
+  border-color:#6d512e !important;
+}
+.spell .name{
+  color:#f0e2cc !important;
+}
+.spell .desc{
+  color:#d0c3ae !important;
+}
+.prep{
+  background:linear-gradient(#497343,#263d23) !important;
+  border:1px solid #73996c !important;
+}
+.notprep{
+  background:linear-gradient(#6e191b,#310b0d) !important;
+  border:1px solid #a85a4e !important;
+}
+.preparedSpell{
+  background:#23311f !important;
+  color:#dcebd6 !important;
+  border-color:#64875b !important;
+}
+.spellSave{
+  color:#e2b3a4 !important;
+}
+
+/* Fede affiancata */
+.faithPanel{
+  min-height:100%;
+}
+.faithPanel .section{
+  margin-top:0 !important;
+}
+
+/* Equipaggiamento */
+.equip input{
+  color:#eee3d1 !important;
+}
+.notearea{
+  min-height:150px;
+}
+
+/* Footer */
+.footer{
+  color:#9d8968 !important;
+  border-top:1px solid #45351f;
+  margin-top:10px;
+}
+
+/* Decorazione laterale sottile sui pannelli principali */
+.identity .field:first-child,
+.columns > div,
+.faithPanels > div,
+.spellTop > *,
+.money .field{
+  position:relative;
+}
+
+/* Contrasto mobile */
+@media(max-width:800px){
+  body{padding:7px}
+  .app{padding:4px}
+  .tab{font-size:9px;padding:10px 3px}
+}
+
+</style>
+
+<style id="wee-jas-mockup-style">
+/* ===== WEE JAS MOCKUP — grafica CSS-only ===== */
+:root{
+  --wf-black:#080908;
+  --wf-black2:#0e0e0c;
+  --wf-panel:#11110f;
+  --wf-panel2:#151511;
+  --wf-gold:#9d7334;
+  --wf-gold-hi:#d2a85a;
+  --wf-gold-soft:#74582e;
+  --wf-red:#77161b;
+  --wf-red-hi:#b52b2c;
+  --wf-text:#eadfcb;
+  --wf-muted:#b6a78e;
+  --wf-green:#50744a;
+}
+
+html,body{
+  background:
+    radial-gradient(ellipse at 50% 0%,rgba(120,24,28,.15),transparent 34%),
+    radial-gradient(ellipse at 10% 55%,rgba(183,145,67,.055),transparent 32%),
+    radial-gradient(ellipse at 90% 55%,rgba(183,145,67,.045),transparent 32%),
+    repeating-linear-gradient(0deg,rgba(255,255,255,.008) 0 1px,transparent 1px 5px),
+    var(--wf-black) !important;
+  color:var(--wf-text) !important;
+}
+
+/* filigrana, quasi invisibile */
+body:after{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+  opacity:.035;
+  background:
+    radial-gradient(circle at 16% 20%,transparent 0 75px,#c19a51 76px,transparent 78px),
+    radial-gradient(circle at 84% 78%,transparent 0 95px,#c19a51 96px,transparent 98px),
+    repeating-radial-gradient(ellipse at 50% 50%,transparent 0 110px,#c19a51 111px 112px,transparent 113px 220px);
+}
+
+body,.app{position:relative;z-index:1}
+.app{
+  max-width:1280px;
+  padding:8px;
+  background:linear-gradient(135deg,#1a150e,#070807 12%,#0d0e0c 50%,#070807 88%,#1a150e);
+  border:1px solid var(--wf-gold);
+  box-shadow:
+    0 0 0 1px #3e2e19,
+    0 0 0 3px #0b0b09,
+    0 20px 60px rgba(0,0,0,.9);
+}
+
+/* cornici esterne */
+.app:before,.app:after{
+  content:"✥";
+  position:absolute;
+  z-index:20;
+  color:var(--wf-gold-hi);
+  font-size:18px;
+  line-height:1;
+  text-shadow:0 1px 5px #000;
+  pointer-events:none;
+}
+.app:before{left:7px;top:7px}.app:after{right:7px;top:7px}
+
+/* Header: più vicino al mockup, senza effetto "card moderna" */
+.header{
+  min-height:84px;
+  border:1px solid var(--wf-gold) !important;
+  border-radius:0 !important;
+  background:
+    radial-gradient(circle at 14% 50%,rgba(113,22,27,.30),transparent 25%),
+    linear-gradient(90deg,#17130e,#080907 52%,#17130e) !important;
+  box-shadow:inset 0 0 0 1px rgba(215,172,86,.07),0 5px 20px rgba(0,0,0,.65) !important;
+}
+.header:before,.header:after{
+  content:"◆";
+  position:absolute;
+  color:var(--wf-gold-hi);
+  font-size:9px;
+  top:7px;
+}
+.header:before{left:20px}.header:after{right:20px}
+
+.skull{
+  width:60px;height:60px;
+  border-radius:50%;
+  border:1px solid var(--wf-gold-hi) !important;
+  background:
+    radial-gradient(circle,#15100c 0 30%,#73161b 31% 39%,#090908 41% 100%) !important;
+  box-shadow:inset 0 0 0 3px #241a10,0 0 12px #000 !important;
+}
+.title{
+  color:#ead7b5 !important;
+  text-transform:uppercase;
+  letter-spacing:2px;
+  text-shadow:0 2px 4px #000 !important;
+}
+.subtitle{
+  color:#bd9853 !important;
+}
+
+/* TABS: vere "placche" fantasy */
+.tabs{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:3px;
+  padding:4px;
+  background:#070806 !important;
+  border:1px solid var(--wf-gold) !important;
+  border-top:0 !important;
+  border-radius:0 !important;
+  box-shadow:inset 0 -2px 0 #020202,0 5px 15px #000 !important;
+}
+.tab{
+  position:relative;
+  overflow:hidden;
+  min-height:42px;
+  padding:10px 17px !important;
+  border:1px solid #80602f !important;
+  border-radius:2px !important;
+  background:
+    linear-gradient(180deg,#18130e,#080908 48%,#18120d) !important;
+  color:#c9b58e !important;
+  font-family:Georgia,serif;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+  text-shadow:0 1px 3px #000;
+  box-shadow:
+    inset 0 1px rgba(255,220,157,.12),
+    inset 0 -2px rgba(0,0,0,.55),
+    0 2px 5px #000 !important;
+}
+.tab:before,.tab:after{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  color:var(--wf-gold);
+  font-size:7px;
+  opacity:.9;
+}
+.tab:before{content:"◆";left:5px}
+.tab:after{content:"◆";right:5px}
+.tab.active{
+  color:#f3dfbd !important;
+  background:
+    linear-gradient(180deg,#84191e,#4c0f13 50%,#23090b) !important;
+  border-color:#c99b4d !important;
+  box-shadow:
+    inset 0 0 16px rgba(180,38,43,.22),
+    inset 0 1px rgba(255,228,173,.16),
+    0 0 8px rgba(180,135,58,.12) !important;
+}
+
+/* SCHERMATA */
+.screen{
+  background:
+    radial-gradient(circle at 50% 0%,rgba(110,80,35,.04),transparent 38%),
+    linear-gradient(#10100e,#090a08) !important;
+  border:1px solid var(--wf-gold) !important;
+  border-top:0 !important;
+  border-radius:0 !important;
+  color:var(--wf-text) !important;
+  box-shadow:inset 0 0 40px rgba(0,0,0,.6),0 10px 30px #000 !important;
+}
+
+/* SEZIONI: targhe sottili, non pillole */
+.section{
+  position:relative;
+  background:
+    linear-gradient(90deg,#080908 0%,#5d1116 9%,#74171b 50%,#5d1116 91%,#080908 100%) !important;
+  border:1px solid var(--wf-gold) !important;
+  border-radius:1px !important;
+  color:#e9bd70 !important;
+  padding:6px 30px !important;
+  margin:9px 0 7px !important;
+  font-family:Georgia,serif;
+  text-transform:uppercase;
+  letter-spacing:1px !important;
+  text-align:center;
+  text-shadow:0 2px 3px #000;
+  box-shadow:inset 0 1px rgba(255,220,158,.09),0 3px 8px #000 !important;
+}
+.section:before,.section:after{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  color:var(--wf-gold-hi);
+  font-size:8px;
+}
+.section:before{content:"❖";left:9px}.section:after{content:"❖";right:9px}
+
+/* PANNELLI: niente bianco, superficie quasi nera con bordo oro */
+.field,.stat,.box,.panel,.card,.tablewrap,.faithPanel,.spellRule,.preparedSummary,.hpPanel{
+  background:
+    linear-gradient(145deg,#171613,#0c0d0b) !important;
+  border:1px solid var(--wf-gold-soft) !important;
+  border-radius:2px !important;
+  color:var(--wf-text) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(210,168,90,.035),
+    inset 0 0 18px rgba(0,0,0,.5),
+    0 4px 12px #000 !important;
+}
+
+/* bordini angolari grafici sui contenitori */
+.field:before,.field:after,.faithPanel:before,.faithPanel:after,
+.hpPanel:before,.hpPanel:after,.tablewrap:before,.tablewrap:after{
+  content:"";
+  position:absolute;
+  width:8px;height:8px;
+  border-color:var(--wf-gold-hi);
+  pointer-events:none;
+}
+.field:before,.faithPanel:before,.hpPanel:before,.tablewrap:before{
+  left:-1px;top:-1px;border-left:1px solid;border-top:1px solid;
+}
+.field:after,.faithPanel:after,.hpPanel:after,.tablewrap:after{
+  right:-1px;bottom:-1px;border-right:1px solid;border-bottom:1px solid;
+}
+
+/* INPUT: come riquadri incisi */
+input,textarea{
+  background:#090a08 !important;
+  color:#eee4d2 !important;
+  border:1px solid #66502c !important;
+  border-radius:1px !important;
+  box-shadow:inset 0 2px 7px #000 !important;
+}
+input:focus,textarea:focus{
+  border-color:var(--wf-gold-hi) !important;
+  outline:1px solid rgba(210,168,90,.12);
+  box-shadow:0 0 6px rgba(210,168,90,.10),inset 0 2px 7px #000 !important;
+}
+input::placeholder,textarea::placeholder{color:#736a5c !important}
+
+/* STATISTICHE */
+.stat input{
+  background:#090a08 !important;
+  color:#ead9b8 !important;
+}
+.mod{
+  background:linear-gradient(#5d1318,#26090c) !important;
+  border:1px solid #8f6b34 !important;
+  color:#f0d29a !important;
+}
+
+/* BOTTONI — cornice fantasy, angoli e iconografia */
+button,.add,.slotBtn{
+  position:relative;
+  overflow:visible !important;
+  background:
+    linear-gradient(180deg,#3a2b1b,#15120e 48%,#2a1e12) !important;
+  border:1px solid #aa7d3b !important;
+  border-radius:1px !important;
+  color:#ead4aa !important;
+  font-family:Georgia,serif;
+  text-shadow:0 1px 3px #000;
+  box-shadow:
+    inset 0 1px rgba(255,225,167,.13),
+    inset 0 -2px rgba(0,0,0,.5),
+    0 3px 8px #000 !important;
+}
+button:before,button:after,.add:before,.add:after{
+  content:"";
+  position:absolute;
+  width:7px;height:7px;
+  border-color:#d1a457;
+  pointer-events:none;
+}
+button:before,.add:before{
+  left:-2px;top:-2px;border-left:1px solid;border-top:1px solid;
+}
+button:after,.add:after{
+  right:-2px;bottom:-2px;border-right:1px solid;border-bottom:1px solid;
+}
+button:hover,.add:hover,.slotBtn:hover{
+  background:linear-gradient(180deg,#523a20,#1e160e 50%,#3b2817) !important;
+  border-color:#d4a858 !important;
+}
+button:active,.add:active,.slotBtn:active{transform:translateY(1px)}
+
+/* Bottoni principali rosso rubino */
+#longRest,.restBtn{
+  background:linear-gradient(180deg,#68171b,#2d090b) !important;
+  border-color:#b48946 !important;
+}
+#longRest:before,.restBtn:before{
+  content:"✦";
+  width:auto;height:auto;
+  border:0;
+  left:8px;top:50%;
+  transform:translateY(-50%);
+  color:#d7aa5a;
+}
+
+/* HP — pannello come nel mockup */
+.hpPanel{
+  background:
+    radial-gradient(circle at 20% 50%,rgba(117,23,27,.18),transparent 28%),
+    linear-gradient(145deg,#1b1712,#090a08) !important;
+  border-color:#a37a3b !important;
+}
+.hpLabel{color:#e03935 !important;text-transform:uppercase;letter-spacing:.7px}
+.hp input{
+  background:#070807 !important;
+  color:#f3e4c6 !important;
+  border-color:#9b743a !important;
+  font-size:31px !important;
+}
+.hp button{
+  width:42px !important;height:42px !important;
+  border-radius:1px !important;
+  background:linear-gradient(#4b171a,#18090b) !important;
+  color:#e4c88e !important;
+}
+
+/* TABELLE */
+table{background:#0a0b09 !important;color:#e8decd !important}
+th{
+  background:linear-gradient(#241d15,#0e0e0c) !important;
+  color:#d8ae64 !important;
+  border-color:#5e4728 !important;
+  text-transform:uppercase;
+  text-shadow:0 1px 2px #000;
+}
+td{
+  background:rgba(9,10,8,.96) !important;
+  color:#e5dccd !important;
+  border-color:#40341f !important;
+}
+tr:hover td{background:#17140f !important}
+.highlight{
+  background:#65151a !important;
+  color:#f1d39a !important;
+  box-shadow:inset 0 0 0 1px #bd8c45;
+}
+
+/* Fede e Scacciare */
+.faithPanel{position:relative}
+.turntable th,.turntable td{font-size:10px}
+.turntable th:first-child{text-align:left;color:#d8ae64 !important}
+
+/* INCANTESIMI — righe nere e indicatori leggibili */
+.levelbtn{
+  background:linear-gradient(#302417,#0f0e0b) !important;
+  border-color:#80602f !important;
+  border-radius:1px !important;
+  color:#d7bc88 !important;
+}
+.levelbtn.active{
+  background:linear-gradient(#77171b,#2c090c) !important;
+  border-color:#c79a4c !important;
+  color:#f3dfbd !important;
+}
+.slotLevelRow,.slot{
+  background:linear-gradient(#1b1812,#0c0d0b) !important;
+  border-color:#68502b !important;
+  border-radius:1px !important;
+}
+.slotLevelName{color:#d5ac61 !important}
+.prepCount,.spellFilter,.slotStatus{color:#b7a78d !important}
+.slotDots{color:#000 !important;text-shadow:0 0 0 #000}
+.slotDotUsed,.slotDotFree{color:#050505 !important}
+.slotAvailable{color:#7ba36e !important}
+.slotExhausted{color:#df5148 !important}
+.spell{
+  background:linear-gradient(145deg,#181713,#0b0c0a) !important;
+  border-color:#5f4728 !important;
+  border-radius:1px !important;
+}
+.spell .name{color:#e8ddca !important}
+.spell .desc{color:#bfb3a1 !important}
+.prep{background:linear-gradient(#41643c,#263d24) !important;border:1px solid #76986c !important}
+.notprep{background:linear-gradient(#651619,#300b0d) !important;border:1px solid #a2584d !important}
+.preparedSpell{
+  background:#25371f !important;
+  border-color:#64855b !important;
+  color:#dce8d7 !important;
+}
+.spellSave{color:#d39c91 !important}
+
+/* Equipaggiamento / note */
+.equip input{color:#e8dece !important}
+.notearea{background:#0b0c0a !important;min-height:150px}
+
+/* Testo generale */
+.field label,.stat label,.tiny,.spellMeta{
+  color:#bcae98 !important;
+  text-shadow:0 1px 2px #000;
+}
+.footer{color:#8f805f !important;border-top:1px solid #46361f}
+
+/* Mobile */
+@media(max-width:800px){
+  .tab{font-size:9px;padding-left:12px !important;padding-right:12px !important}
+  .screen{padding:8px}
+}
+</style>
+
+
+<style id="wee-jas-stone-buttons">
+/* ===== BOTTONI — PIETRA NERA IN RILIEVO ===== */
+button,.add,.slotBtn{
+  position:relative !important;
+  background:
+    linear-gradient(145deg,
+      #3b3b38 0%,
+      #20211f 18%,
+      #0b0c0b 48%,
+      #171816 78%,
+      #050606 100%) !important;
+  color:#e6d7b8 !important;
+  border:1px solid #806238 !important;
+  border-radius:3px !important;
+
+  /* rilievo della pietra */
+  box-shadow:
+    inset 1px 1px 0 rgba(255,255,255,.16),
+    inset -2px -2px 0 rgba(0,0,0,.85),
+    inset 0 0 0 1px rgba(0,0,0,.55),
+    0 2px 0 #050505,
+    0 4px 7px rgba(0,0,0,.82),
+    0 0 0 1px rgba(181,143,72,.14) !important;
+
+  text-shadow:
+    0 1px 2px #000,
+    0 -1px 0 rgba(255,255,255,.08) !important;
+}
+
+/* superficie irregolare / minerale */
+button::after,.add::after,.slotBtn::after{
+  content:"" !important;
+  position:absolute !important;
+  inset:2px !important;
+  width:auto !important;
+  height:auto !important;
+  border:0 !important;
+  border-radius:2px !important;
+  pointer-events:none;
+  background:
+    linear-gradient(125deg,rgba(255,255,255,.045),transparent 28%),
+    linear-gradient(305deg,rgba(0,0,0,.20),transparent 35%);
+  box-shadow:
+    inset 0 0 8px rgba(0,0,0,.45),
+    inset 0 1px rgba(255,255,255,.045);
+}
+
+/* piccoli angoli metallici */
+button::before,.add::before,.slotBtn::before{
+  content:"" !important;
+  position:absolute !important;
+  left:-2px !important;
+  top:-2px !important;
+  width:7px !important;
+  height:7px !important;
+  border-left:1px solid #d0a75a !important;
+  border-top:1px solid #d0a75a !important;
+  border-right:0 !important;
+  border-bottom:0 !important;
+  background:transparent !important;
+  pointer-events:none;
+}
+
+button:hover,.add:hover,.slotBtn:hover{
+  background:
+    linear-gradient(145deg,
+      #494946 0%,
+      #292a27 18%,
+      #10110f 48%,
+      #20211e 78%,
+      #070807 100%) !important;
+  border-color:#c19a50 !important;
+  box-shadow:
+    inset 1px 1px 0 rgba(255,255,255,.19),
+    inset -2px -2px 0 rgba(0,0,0,.9),
+    0 2px 0 #050505,
+    0 5px 10px rgba(0,0,0,.9),
+    0 0 7px rgba(177,135,61,.14) !important;
+}
+
+button:active,.add:active,.slotBtn:active{
+  transform:translateY(2px) !important;
+  box-shadow:
+    inset 2px 2px 5px rgba(0,0,0,.82),
+    inset -1px -1px 0 rgba(255,255,255,.05),
+    0 1px 0 #050505 !important;
+}
+
+/* pulsanti rossi importanti: stessa pietra, tinta rubino */
+#longRest,.restBtn{
+  background:
+    linear-gradient(145deg,
+      #542326 0%,
+      #2b1517 20%,
+      #10090a 50%,
+      #241012 80%,
+      #080607 100%) !important;
+  border-color:#a67a3d !important;
+}
+#longRest:hover,.restBtn:hover{
+  background:
+    linear-gradient(145deg,
+      #673034 0%,
+      #35191c 20%,
+      #140b0c 50%,
+      #2d1518 80%,
+      #090607 100%) !important;
+}
+
+/* i + / - piccoli: pietra più compatta */
+.hp button,.slotBtn{
+  min-width:32px;
+  min-height:32px;
+}
+</style>
+
+
+<style id="thaco-beta-fix-final">
+/* ===== THAC0 BETA — CA da -5 a +15 ===== */
+table.thaco#thacoTable{
+  width:max-content !important;
+  min-width:0 !important;
+  max-width:100% !important;
+  margin:0 auto !important;
+  table-layout:fixed !important;
+  border-collapse:collapse !important;
+}
+table.thaco#thacoTable th,
+table.thaco#thacoTable td{
+  width:39px !important;
+  min-width:39px !important;
+  max-width:39px !important;
+  height:32px !important;
+  padding:4px 2px !important;
+  text-align:center !important;
+  vertical-align:middle !important;
+  box-sizing:border-box !important;
+  font-size:11px !important;
+  font-variant-numeric:tabular-nums;
+}
+table.thaco#thacoTable tr:first-child th{
+  width:auto !important;
+  min-width:0 !important;
+  max-width:none !important;
+}
+table.thaco#thacoTable td:first-child,
+table.thaco#thacoTable td:nth-child(1),
+table.thaco#thacoTable th:first-child{
+  width:39px !important;
+  min-width:39px !important;
+  max-width:39px !important;
+}
+</style>
+
+
+<style id="beta-layout-fixes">
+.hpPanel{display:flex!important;flex-direction:column!important;align-items:center!important}
+.hpPanel .hp{display:flex!important;justify-content:center!important;align-items:center!important}
+.hpMax{width:100%!important;display:flex!important;justify-content:center!important;align-items:center!important;text-align:center!important;margin-top:8px!important}
+.hpMax input{text-align:center!important}
+.field,.stat,.panel,.card,.box{text-align:center!important}
+.field input,.field select,.field textarea,.stat input,.stat select,.stat textarea{text-align:center!important}
+
+.protectionSummary{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:7px!important;
+  margin-bottom:8px!important;
+}
+.protectionGrid{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 125px!important;
+  gap:7px!important;
+  align-items:end!important;
+}
+.protectionGrid .field{text-align:center!important}
+.protectionGrid input{text-align:center!important}
+#protectionTable th,#protectionTable td,#protectionTable input{text-align:center!important}
+#protectionTable td:nth-child(3) input{text-align:left!important}
+@media(max-width:650px){
+  .protectionSummary{grid-template-columns:1fr 1fr!important}
+  .protectionGrid{grid-template-columns:minmax(0,1fr) 105px!important}
+}
+</style>
+
+
+<style id="beta-notes-wrap-fix">
+/* ===== NOTE E DESCRIZIONI — testo sempre leggibile ===== */
+textarea,
+.notearea,
+#protectionTable input,
+#weaponsTable input,
+#gearBody input,
+#protectionTable textarea,
+#weaponsTable textarea,
+#gearBody textarea{
+  white-space:pre-wrap !important;
+  overflow-wrap:anywhere !important;
+  word-break:break-word !important;
+  text-overflow:clip !important;
+}
+
+/* Le colonne Note/Descrizione devono avere spazio sufficiente */
+#protectionTable td:nth-child(3),
+#weaponsTable td:nth-child(4),
+#gearBody td:nth-child(4){
+  white-space:normal !important;
+  overflow-wrap:anywhere !important;
+  word-break:break-word !important;
+}
+
+/* Per i testi lunghi, altezza minima e testo disposto su più righe */
+#protectionTable td:nth-child(3) input,
+#weaponsTable td:nth-child(4) input,
+#gearBody td:nth-child(4) input{
+  min-height:38px !important;
+  height:auto !important;
+  white-space:normal !important;
+  overflow:visible !important;
+  line-height:1.25 !important;
+  text-align:left !important;
+}
+
+/* Tutte le descrizioni delle spell vanno a capo naturalmente */
+.spell .desc,
+.spellMeta,
+.tiny,
+.faithPanel,
+#protectionTable,
+#weaponsTable,
+#gearBody{
+  overflow-wrap:anywhere !important;
+  word-break:normal !important;
+  white-space:normal !important;
+}
+
+/* Le note lunghe sono volutamente allineate a sinistra per la leggibilità */
+.notearea{
+  text-align:left !important;
+  white-space:pre-wrap !important;
+  overflow-wrap:anywhere !important;
+  line-height:1.35 !important;
+}
+</style>
+
+
+<style id="beta-real-wrap">
+.wrapNote,
+#protectionTable textarea,
+#weaponsTable textarea,
+#gearBody textarea{
+  width:100%!important;
+  min-height:42px!important;
+  box-sizing:border-box!important;
+  resize:vertical!important;
+  white-space:pre-wrap!important;
+  overflow-wrap:anywhere!important;
+  word-break:break-word!important;
+  overflow-x:hidden!important;
+  line-height:1.25!important;
+  text-align:left!important;
+}
+#protectionTable td:nth-child(3),
+#weaponsTable td:nth-child(4),
+#gearBody td:nth-child(4){
+  white-space:normal!important;
+  overflow:visible!important;
+  vertical-align:middle!important;
+}
+</style>
+
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#080908">
+<meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="apple-touch-icon" href="icon.svg">
+</head>
+<body>
+<div class="app">
+<header class="header">
+ <div class="skull">💀</div>
+ <div><div class="title">CHIERICO DI WEE JAS</div><div class="subtitle">D&D BASIC • SCATOLA ROSSA • LA STREGONA DI RUBINO</div></div>
+</header>
+<nav class="tabs">
+ <button type="button" class="tab active" data-tab="personaggio">⚔ Personaggio</button>
+ <button type="button" class="tab" data-tab="combattimento">🛡 Combattimento</button>
+ <button type="button" class="tab" data-tab="fede">☠ Fede</button>
+ <button type="button" class="tab" data-tab="incantesimi">📖 Incantesimi</button>
+ <button type="button" class="tab" data-tab="inventario">🎒 Inventario</button>
+</nav>
+
+<section id="personaggio" class="screen active">
+ <div class="section">✦ DATI DEL PERSONAGGIO ✦</div>
+ <div class="grid identity">
+  <div class="field"><label>Nome del personaggio</label><input id="nome" placeholder="Nome"></div>
+  <div class="field"><label>Giocatore</label><input id="giocatore" placeholder="Nome"></div>
+  <div class="field"><label>Livello</label><input id="livello" type="number" min="1" max="36" value="1"></div>
+  <div class="field"><label>Classe</label><input id="classe" value="Chierico" readonly></div>
+ </div>
+ <div class="grid identity" style="margin-top:8px">
+  <div class="field"><label>Razza</label><input id="razza" placeholder="Razza"></div>
+  <div class="field"><label>Allineamento</label><input id="allineamento" placeholder="Allineamento"></div>
+ </div>
+ <div class="section">✦ ESPERIENZA ✦</div>
+ <div class="grid basic4">
+  <div class="field"><label>Punti Esperienza (PE)</label><input id="xp" type="number" min="0" value="0"></div>
+  <div class="field"><label>Prossimo livello</label><input id="nextlevel" readonly></div>
+  <div class="field"><label>PE necessari</label><input id="nextxp" readonly></div>
+  <div class="field"><label>PE mancanti</label><input id="xpmissing" readonly></div>
+ </div>
+ <div class="section">✦ CARATTERISTICHE ✦</div>
+ <div class="grid stats" id="stats"></div>
+ <div class="tiny">Inserisci il punteggio. Il modificatore viene calcolato automaticamente secondo la D&D Basic / Scatola Rossa.</div>
+ <div class="section">✦ DATI FISICI ✦</div>
+ <div class="grid basic4">
+  <div class="field"><label>Sesso</label><input id="sesso"></div>
+  <div class="field"><label>Età</label><input id="eta"></div>
+  <div class="field"><label>Altezza</label><input id="altezza"></div>
+  <div class="field"><label>Peso</label><input id="peso"></div>
+ </div>
+ <div class="grid basic4" style="margin-top:8px">
+  <div class="field"><label>Capelli</label><input id="capelli"></div>
+  <div class="field"><label>Occhi</label><input id="occhi"></div>
+  <div class="field"><label>Luogo d'origine</label><input id="origine"></div>
+  <div class="field"><label>Segni particolari</label><input id="segni"></div>
+ </div>
+ <div class="section">✦ NOTE / DESCRIZIONE DEL PERSONAGGIO ✦</div>
+ <textarea class="notearea" id="note" placeholder="Aspetto, personalità, storia, luoghi, persone incontrate, annotazioni..."></textarea>
+</section>
+
+<section id="combattimento" class="screen">
+ <div class="section">✦ PUNTI FERITA ✦</div>
+ <div class="hpPanel">
+  <div class="hpLabel">PF ATTUALI</div>
+  <div class="hp">
+   <button type="button" id="hpminus" aria-label="Diminuisci punti ferita">−</button>
+   <input id="pf" type="number" min="0" value="1" aria-label="Punti ferita attuali">
+   <button type="button" id="hpplus" aria-label="Aumenta punti ferita">+</button>
+  </div>
+  <div class="hpMax"><span>PF MASSIMI</span><input id="pfmax" type="number" min="0" value="1"></div>
+ </div>
+
+ <div class="section">✦ TIRI SALVEZZA ✦</div>
+ <div class="tablewrap">
+  <table class="savesTable">
+   <thead><tr><th>Tipo</th><th>Base</th><th>Bonus / Malus</th><th>Descrizione Bonus / Malus</th></tr></thead>
+   <tbody>
+    <tr><th>Veleno / Raggio della Morte</th><td><input id="save1" class="saveNum" type="number" min="0" max="99" readonly></td><td><input id="save1bonus" class="saveNum" type="number" min="-99" max="99" placeholder="0"></td><td><input id="save1note" placeholder="Es. Anello +1 contro veleni"></td></tr>
+    <tr><th>Bacchette Magiche</th><td><input id="save2" class="saveNum" type="number" min="0" max="99" readonly></td><td><input id="save2bonus" class="saveNum" type="number" min="-99" max="99" placeholder="0"></td><td><input id="save2note" placeholder="Descrizione"></td></tr>
+    <tr><th>Paralisi / Pietrificazione</th><td><input id="save3" class="saveNum" type="number" min="0" max="99" readonly></td><td><input id="save3bonus" class="saveNum" type="number" min="-99" max="99" placeholder="0"></td><td><input id="save3note" placeholder="Descrizione"></td></tr>
+    <tr><th>Soffio del Drago</th><td><input id="save4" class="saveNum" type="number" min="0" max="99" readonly></td><td><input id="save4bonus" class="saveNum" type="number" min="-99" max="99" placeholder="0"></td><td><input id="save4note" placeholder="Descrizione"></td></tr>
+    <tr><th>Incantesimi</th><td><input id="save5" class="saveNum" type="number" min="0" max="99" readonly></td><td><input id="save5bonus" class="saveNum" type="number" min="-99" max="99" placeholder="0"></td><td><input id="save5note" placeholder="Descrizione"></td></tr>
+   </tbody>
+  </table>
+ </div>
+
+ <div class="section">✦ TIRO PER COLPIRE ✦</div>
+ <div class="grid basic4">
+  <div class="field"><label>THAC0</label><input id="thaco" type="number" value="19" readonly></div>
+  <div class="field"><label>Bonus / Malus</label><input id="atkbonus" type="number" value="0"></div>
+ </div>
+ <div class="tiny">Il THAC0 si aggiorna automaticamente con il livello. La tabella sotto è solo di consultazione: il tiro si calcola a mente.</div>
+ <div class="tablewrap">
+  <table class="thaco" id="thacoTable">
+   <thead><tr><th colspan="22">TABELLA DI CONSULTAZIONE → TIRO MINIMO</th></tr></thead>
+   <tbody id="thacoBody"></tbody>
+  </table>
+ </div>
+
+ <div class="section">✦ PROTEZIONE ✦</div>
+
+<div class="protectionSummary">
+  <div class="field"><label>CA BASE</label><input id="cabase" type="number" value="9"></div>
+  <div class="field"><label>Modificatore DES</label><input id="cadex" type="number" value="0"><div class="tiny">Non modifica la CA</div></div>
+  <div class="field"><label>CA FINALE</label><input id="cafinale" readonly></div>
+</div>
+
+<div class="protectionGrid">
+  <div class="field"><label>Armatura</label><input id="armatura" placeholder="Es. Cotta di maglia"></div>
+  <div class="field"><label>Modificatore CA</label><input id="armaturaMod" type="number" value="0" placeholder="Es. -4"></div>
+  <div class="field"><label>Scudo</label><input id="scudo" placeholder="Es. Scudo"></div>
+  <div class="field"><label>Modificatore CA</label><input id="scudoMod" type="number" value="0" placeholder="Es. -1"></div>
+  <div class="field"><label>Altri bonus / malus CA</label><input id="caaltro" type="number" value="0"></div>
+  <div class="field"><label>Descrizione</label><input id="caaltroNote" placeholder="Es. anello +1"></div>
+</div>
+
+<div class="tiny">La CA finale parte dalla CA base e applica armatura, scudo, Destrezza e altri bonus/malus. Una CA più bassa è migliore.</div>
+<table class="equip" id="protectionTable">
+  <thead><tr><th>Oggetto / Effetto</th><th>Bonus / Malus CA</th><th>Descrizione / Note</th></tr></thead>
+  <tbody id="protectionBody"></tbody>
+ </table>
+ <div style="display:flex;gap:7px;flex-wrap:wrap">
+  <button type="button" class="add" id="addProtection">＋ Aggiungi riga</button>
+  <button type="button" class="add" id="removeProtection">− Elimina riga</button>
+ </div>
+
+ <div class="section">✦ ARMI ✦</div>
+ <table class="equip" id="weaponsTable">
+  <thead><tr><th>Arma</th><th>Bonus</th><th>Danno</th><th>Note / Poteri speciali</th></tr></thead>
+  <tbody id="weaponBody"></tbody>
+ </table>
+ <div style="display:flex;gap:7px;flex-wrap:wrap">
+  <button type="button" class="add" id="addWeapon">＋ Aggiungi riga</button>
+  <button type="button" class="add" id="removeWeapon">− Elimina riga</button>
+ </div>
+ <div class="footer">D&D Basic • Scatola Rossa — valori di classe automatici, campi di gioco personalizzabili.</div>
+</section>
+
+<section id="fede" class="screen">
+ <div class="section">✦ WEE JAS — LA DEA DELLA MAGIA E DELLA MORTE ✦</div>
+ <div class="faithPanels">
+  <div class="box faithPanel">
+   <h3 style="margin:3px 0 8px;text-align:center;color:#6f1630">☠ WEE JAS</h3>
+   <div class="field"><label>Divinità</label><input id="fedeDivinita" value="Wee Jas"></div>
+   <div class="field" style="margin-top:7px"><label>Simbolo sacro</label><input id="simbolo" value="Teschio rosso"></div>
+   <div class="field" style="margin-top:7px"><label>Riti / Preghiere</label><textarea id="fedenote" class="faithArea" placeholder="Riti, preghiere, offerte..."></textarea></div>
+  </div>
+  <div class="box faithPanel">
+   <h3 style="margin:3px 0 8px;text-align:center;color:#6f1630">✦ FEDE E PRECETTI ✦</h3>
+   <div class="field"><label>Precetti / Volontà della divinità</label><textarea id="precetti" class="faithArea" placeholder="Obblighi, divieti, missioni, favori..."></textarea></div>
+   <div class="field" style="margin-top:7px"><label>Note religiose</label><textarea id="notefede" class="faithArea" placeholder="Templi, sacerdoti, reliquie, nemici della fede..."></textarea></div>
+  </div>
+ </div>
+
+ <div class="section">☠ SCACCIARE I NON MORTI ✦</div>
+ <div class="field" style="max-width:180px;margin-bottom:8px"><label>Livello del Chierico</label><input id="turnLevel" type="number" min="1" max="36" value="1" readonly></div>
+ <div class="tablewrap">
+  <table class="turntable" id="turnTable">
+   <thead><tr><th>Non-morto</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9-10</th><th>11-12</th><th>13-14</th><th>15-16</th><th>17-20</th><th>21-24</th><th>25-28</th><th>29-32</th><th>33-36</th></tr></thead>
+   <tbody id="turnBody"></tbody>
+  </table>
+ </div>
+ <div class="tiny" style="text-align:left;line-height:1.45"><strong>Consultazione:</strong> la colonna del livello attuale è evidenziata automaticamente. Per i risultati <strong>7, 9 o 11</strong> tira 2d6: il tentativo riesce con un risultato uguale o superiore al numero indicato. <strong>T</strong> = scacciato automaticamente; <strong>D</strong> = distrutto automaticamente; <strong>D+</strong> = distrutti 3d6 DV; <strong>D#</strong> = distrutti 4d6 DV; <strong>—</strong> = nessun effetto. Dopo un successo, il DM determina con 2d6 i DV di non-morti influenzati. Un solo tentativo per round.</div>
+
+<div class="section">✦ LINGUE E ABILITÀ SPECIALI ✦</div>
+ <div class="grid basic4">
+  <div class="field"><label>Lingue</label><textarea id="lingue"></textarea></div>
+  <div class="field"><label>Abilità speciali</label><textarea id="abilita"></textarea></div>
+  <div class="field"><label>Reliquie / Simboli</label><textarea id="reliquie"></textarea></div>
+  <div class="field"><label>Note</label><textarea id="culto"></textarea></div>
+ </div>
+</section>
+
+<section id="incantesimi" class="screen">
+ <div class="section">✦ INCANTESIMI DEL CHIERICO ✦</div>
+ <div class="spellTop">
+  <div class="field compactLevel"><label>Livello Chierico</label><input id="spellcasterLevel" type="number" min="1" max="36" value="1" readonly></div>
+  <div class="spellRule">Gli incantesimi partono sempre <strong>🔴 NON PREPARATI</strong>. Dopo averlo preparato, <strong>tocca il nome dell'incantesimo per lanciarlo</strong> e consumare uno slot.</div>
+ </div>
+ <div class="section">✦ LIVELLO INCANTESIMO ✦</div>
+ <div class="spelllevels" id="levelButtons"></div>
+ <div class="section">✦ 🟢 INCANTESIMI PREPARATI · SLOT ✦</div>
+ <div class="spellRule">Il numero sotto ogni livello indica quanti incantesimi puoi preparare. I pulsanti <strong>− / +</strong> segnano come usato o ripristinano 1 slot.</div>
+ <div class="preparedSummary" id="preparedSummary"></div>
+ <button type="button" class="add restBtn" id="longRest">↻ RIPOSO COMPLETO — RIPRISTINA GLI SLOT</button>
+ <div class="section">✦ ELENCO INCANTESIMI ✦</div>
+ <div class="spellFilter" id="spellFilter"></div>
+ <div class="spells" id="spellList"></div>
+ <div class="footer">Descrizioni sintetiche da consultazione rapida del manuale fornito; il TS è indicato separatamente quando previsto.</div>
+</section>
+
+<section id="inventario" class="screen">
+ <div class="section">✦ DENARO ✦</div>
+ <div class="grid money">
+  <div class="field"><label>MO</label><input id="mo" type="number" min="0" value="0"></div>
+  <div class="field"><label>MA</label><input id="ma" type="number" min="0" value="0"></div>
+  <div class="field"><label>MR</label><input id="mr" type="number" min="0" value="0"></div>
+ </div>
+
+ <div class="section">✦ EQUIPAGGIAMENTO ✦</div>
+ <table class="equip"><thead><tr><th>Oggetto</th><th>Quantità</th><th>Ingombro</th><th>Note</th></tr></thead><tbody id="gearBody"></tbody></table>
+ <div style="display:flex;gap:7px;flex-wrap:wrap">
+  <button type="button" class="add" id="addGear">＋ Aggiungi riga</button>
+  <button type="button" class="add" id="removeGear">− Elimina riga</button>
+ </div>
+ <div class="tiny" style="text-align:left">L'ingombro è annotabile ma non viene imposto automaticamente: la sua gestione è lasciata al Master.</div>
+
+ <div class="section">✦ NOTE / OGGETTI IMPORTANTI ✦</div>
+ <textarea class="notearea" id="inventarioNote" placeholder="Oggetti magici, chiavi, lettere, tesori, oggetti della quest, proprietà speciali..."></textarea>
+</section>
+</div>
+
+<script>
+const key="wee_jas_basic_v9";
+const statNames=["forza","intelligenza","saggezza","destrezza","costituzione","carisma"];
+const statLabels={forza:"FORZA",intelligenza:"INTELLIGENZA",saggezza:"SAGGEZZA",destrezza:"DESTREZZA",costituzione:"COSTITUZIONE",carisma:"CARISMA"};
+const spells={"1": ["Cura Ferite Leggere*", "Individuazione del Magico", "Individuazione del Male", "Luce Magica*", "Protezione dal Male", "Purificazione dei Cibi e dell'Acqua", "Resistenza al Freddo", "Scacciapaura*"], "2": ["Benedizione*", "Blocca Persone*", "Incantare i Serpenti", "Individuazione dell'Allineamento*", "Parlare con gli Animali", "Resistenza al Fuoco", "Scoprire Trappole", "Silenzio nel raggio di 4,5 m"], "3": ["Crescita Animale", "Cura Cecità", "Cura Malattie*", "Incantesimo del Colpire", "Localizzare un Oggetto", "Luce Perenne*", "Parlare con i Morti", "Scaccia Maledizioni*"], "4": ["Animare i Morti", "Creare Acqua", "Cura Ferite Gravi*", "Dissolvi Magie", "Metamorfosi dei Bastoni in Serpenti", "Neutralizza Veleno*", "Parlare con le Piante", "Protezione dal Male nel raggio di 3 m"], "5": ["Comando*", "Comunicazione con gli Dei", "Creare Cibo", "Cura Ferite Critiche*", "Distruzione del Male", "Resurrezione*", "Sciame di Insetti", "Vista Rivelante"], "6": ["Animare Oggetti", "Barriera*", "Creare Animali Normali", "Guarigione", "Individuazione della Corretta Via", "Parlare con i Mostri*", "Parola Magica del Ritorno", "Servo Fluttuante"], "7": ["Desiderio", "Parola Sacra", "Potere Magico", "Resurrezione Integrale*", "Ristorazione*", "Sopravvivenza", "Terremoto", "Viaggiare"]};
+const desc={"Cura Ferite Leggere*": "Contatto • Permanente • Cura 1d6+1 PF. Inverso: Infliggi Ferite Leggere, 1d6+1 danni.", "Individuazione del Magico": "0 (solo il chierico) • 2 turni • rileva oggetti, persone e luoghi incantati nel raggio di 18 m.", "Individuazione del Male": "36 m • 6 turni • rileva creature o oggetti malvagi nel raggio d'azione.", "Luce Magica*": "36 m • 12 turni • sfera luminosa di 9 m di diametro; contro gli occhi di una creatura può accecare. Inverso: Tenebre Magiche.", "Protezione dal Male": "0 (solo il chierico) • 12 turni • barriera; -1 ai tiri per colpire delle creature incantate e +1 ai TS del chierico.", "Purificazione dei Cibi e dell'Acqua": "3 m • Permanente • rende commestibili cibo e acqua avariati o contaminati.", "Resistenza al Freddo": "0 • 6 turni • protegge entro 9 m; +2 ai TS contro freddo e riduce i danni da freddo.", "Scacciapaura*": "Contatto • 2 turni • rimuove la paura; altro TS con bonus pari al livello, fino a +6. Inverso: Terrore.", "Benedizione*": "18 m • 6 turni • +1 al morale e +1 ai tiri per colpire/ferire degli alleati nell'area. Inverso: Maledizione.", "Blocca Persone*": "54 m • 9 turni • paralizza fino a 4 umanoidi. Inverso: Sblocca Persone.", "Incantare i Serpenti": "18 m • 2-5 round/turni • incanta un dado vita di serpenti per livello del chierico.", "Individuazione dell'Allineamento*": "0 • 1 round • rivela l'allineamento di un essere entro 3 m. Inverso: Occultamento dell'Allineamento.", "Parlare con gli Animali": "0 • 6 turni • conversazione con animali entro 9 m.", "Resistenza al Fuoco": "9 m • 2 turni • protegge dal fuoco normale e riduce i danni da fuoco magico.", "Scoprire Trappole": "0 • 2 turni • rivela trappole entro 9 m.", "Silenzio nel raggio di 4,5 m": "54 m • 12 turni • area di silenzio di 9 m di diametro; impedisce parlare e lanciare incantesimi.", "Crescita Animale": "36 m • 12 turni • raddoppia le dimensioni di un animale e ne aumenta PF e danni secondo la descrizione.", "Cura Cecità": "Contatto • Permanente • cura ogni tipo di cecità, compresa quella magica, salvo eccezioni.", "Cura Malattie*": "9 m • Permanente • cura una malattia. Inverso: Infliggi Malattie.", "Incantesimo del Colpire": "9 m • 1 turno • aggiunge 1d6 ai danni dell'arma per ogni attacco.", "Localizzare un Oggetto": "36 m • 6 turni • indica la direzione di un oggetto conosciuto entro 36 m.", "Luce Perenne*": "36 m • Permanente • sfera di luce di 18 m. Inverso: Tenebre Perenni.", "Parlare con i Morti": "3 m • 1 round/livello • permette domande a un morto entro i limiti di livello e tempo dalla morte.", "Scaccia Maledizioni*": "Contatto • Permanente • rimuove una maledizione. Inverso: Maledizione.", "Animare i Morti": "18 m • Permanente • anima scheletri e zombi; fino a 1 DV di non-morti per livello.", "Creare Acqua": "3 m • 6 turni • crea una sorgente d'acqua sufficiente per 12 persone per livello.", "Cura Ferite Gravi*": "Contatto • Permanente • cura 2d6+2 PF. Inverso: infligge 2d6+2 danni.", "Dissolvi Magie": "36 m • Permanente • distrugge gli effetti magici in un cubo di 6×6×6 m.", "Metamorfosi dei Bastoni in Serpenti": "36 m • 6 turni • trasforma 2-16 bastoni in serpenti, alcuni velenosi; obbediscono al chierico.", "Neutralizza Veleno*": "Contatto • Permanente • rende innocuo un veleno. Inverso: Crea Veleno.", "Parlare con le Piante": "0 • 3 turni • permette di parlare con le piante e influenzarle.", "Protezione dal Male nel raggio di 3 m": "0 • 12 turni • barriera di 6 m; +1 ai TS e -1 ai tiri per colpire delle creature incantate.", "Comando*": "9 m • Speciale • impone un comando. Inverso: Liberazione dal Comando.", "Comunicazione con gli Dei": "0 • 3 turni • pone 3 domande alla divinità con risposta sì/no entro i limiti indicati.", "Creare Cibo": "3 m • Permanente • crea cibo per 12 uomini e cavalcature per livello.", "Cura Ferite Critiche*": "Contatto • Permanente • cura 3d6+3 PF. Inverso: infligge 3d6+3 danni.", "Distruzione del Male": "9 m • 1 turno • distrugge o scaccia non-morti e creature malvagie nell'area.", "Resurrezione*": "36 m • Permanente • riporta in vita un umanoide entro i limiti del manuale. Inverso: Morte.", "Sciame di Insetti": "144 m • 1 giorno • evoca uno sciame che si muove nella direzione scelta.", "Vista Rivelante": "0 • 1 turno/livello • vede chiaramente oggetti nascosti, invisibili o eterei e rileva allineamento e livello/potere entro 36 m.", "Animare Oggetti": "18 m • 6 turni • anima oggetti; attacchi e danni dipendono da peso e decisione del DM.", "Barriera*": "18 m • 12 turni • barriera di martelli rotanti, 7-70 PF per attraversarla. Inverso: Rimozione di Barriera.", "Creare Animali Normali": "9 m • 10 turni • crea 1-6 animali fedeli al chierico.", "Guarigione": "Contatto • Permanente • cura completamente una creatura e può rimuovere vari effetti debilitanti.", "Individuazione della Corretta Via": "0 • 6 turni + 1 turno/livello • mostra la via verso un luogo indicato.", "Parlare con i Mostri*": "0 • 1 round/livello • conversazione con qualsiasi mostro entro 9 m. Inverso: Incantesimo di Babele.", "Parola Magica del Ritorno": "0 • Istantanea • teletrasporta il chierico e l'equipaggiamento al rifugio consacrato.", "Servo Fluttuante": "18 m • 1 giorno/livello • evoca un servitore umanoide intelligente per un compito; forza 18 e carico fino a 5.000 monete.", "Desiderio": "Speciale • Speciale • solo un chierico di 36° livello con almeno 18 in Saggezza; effetto deciso con il DM.", "Parola Sacra": "0 • Istantanea • colpisce le creature entro 12 m con effetti che dipendono dal loro livello/DV.", "Potere Magico": "0 • 1 turno • permette di usare pergamene o oggetti normalmente riservati ai maghi entro i limiti indicati.", "Resurrezione Integrale*": "18 m • Permanente • riporta in vita qualsiasi essere vivente entro le condizioni descritte. Inverso: Distruzione della Morte.", "Ristorazione*": "Contatto • Permanente • recupera un livello perduto per risucchio di energia. Inverso: Sottrai Vita.", "Sopravvivenza": "Contatto • 1 ora/livello • protegge dai danni ambientali e dalla mancanza d'aria.", "Terremoto": "110 m • 1 turno • provoca scosse telluriche, frane e danni alle strutture.", "Viaggiare": "0 • 1 turno/livello • permette volo e forma gassosa fino a 108 m, con i limiti indicati dal manuale."};
+const spellSaves={"Luce Magica*": "TS: contro incantesimi, se diretta sugli occhi.", "Scacciapaura*": "TS: contro incantesimi; lanciata come Scacciapaura, il bersaglio può effettuare un altro TS con bonus pari al livello del chierico (max +6).", "Blocca Persone*": "TS: contro incantesimi; -2 se lanciato su un gruppo.", "Silenzio nel raggio di 4,5 m": "TS: contro incantesimi per evitare gli effetti.", "Cura Malattie*": "TS: contro incantesimi per la forma inversa.", "Luce Perenne*": "TS: contro incantesimi se diretta contro una creatura.", "Scaccia Maledizioni*": "TS: contro incantesimi per la forma inversa.", "Comando*": "TS: contro incantesimi, -2.", "Distruzione del Male": "TS: contro incantesimi, -2.", "Resurrezione*": "TS: contro incantesimi per la forma inversa Morte.", "Parlare con i Mostri*": "TS: contro incantesimi per evitare la forma inversa Babele.", "Resurrezione Integrale*": "TS: contro incantesimi per la forma inversa Distruzione della Morte.", "Ristorazione*": "TS: contro incantesimi per la forma inversa Sottrai Vita."};
+const spellMeta={"Cura Ferite Leggere*": "Contatto • Permanente • Cura 1d6+1 PF. Inverso: Infliggi Ferite Leggere, 1d6+1 danni.", "Individuazione del Magico": "0 (solo il chierico) • 2 turni • rileva oggetti, persone e luoghi incantati nel raggio di 18 m.", "Individuazione del Male": "36 m • 6 turni • rileva creature o oggetti malvagi nel raggio d'azione.", "Luce Magica*": "36 m • 12 turni • sfera luminosa di 9 m di diametro; contro gli occhi di una creatura può accecare. Inverso: Tenebre Magiche.", "Protezione dal Male": "0 (solo il chierico) • 12 turni • barriera; -1 ai tiri per colpire delle creature incantate e +1 ai TS del chierico.", "Purificazione dei Cibi e dell'Acqua": "3 m • Permanente • rende commestibili cibo e acqua avariati o contaminati.", "Resistenza al Freddo": "0 • 6 turni • protegge entro 9 m; +2 ai TS contro freddo e riduce i danni da freddo.", "Scacciapaura*": "Contatto • 2 turni • rimuove la paura; altro TS con bonus pari al livello, fino a +6. Inverso: Terrore.", "Benedizione*": "18 m • 6 turni • +1 al morale e +1 ai tiri per colpire/ferire degli alleati nell'area. Inverso: Maledizione.", "Blocca Persone*": "54 m • 9 turni • paralizza fino a 4 umanoidi. Inverso: Sblocca Persone.", "Incantare i Serpenti": "18 m • 2-5 round/turni • incanta un dado vita di serpenti per livello del chierico.", "Individuazione dell'Allineamento*": "0 • 1 round • rivela l'allineamento di un essere entro 3 m. Inverso: Occultamento dell'Allineamento.", "Parlare con gli Animali": "0 • 6 turni • conversazione con animali entro 9 m.", "Resistenza al Fuoco": "9 m • 2 turni • protegge dal fuoco normale e riduce i danni da fuoco magico.", "Scoprire Trappole": "0 • 2 turni • rivela trappole entro 9 m.", "Silenzio nel raggio di 4,5 m": "54 m • 12 turni • area di silenzio di 9 m di diametro; impedisce parlare e lanciare incantesimi.", "Crescita Animale": "36 m • 12 turni • raddoppia le dimensioni di un animale e ne aumenta PF e danni secondo la descrizione.", "Cura Cecità": "Contatto • Permanente • cura ogni tipo di cecità, compresa quella magica, salvo eccezioni.", "Cura Malattie*": "9 m • Permanente • cura una malattia. Inverso: Infliggi Malattie.", "Incantesimo del Colpire": "9 m • 1 turno • aggiunge 1d6 ai danni dell'arma per ogni attacco.", "Localizzare un Oggetto": "36 m • 6 turni • indica la direzione di un oggetto conosciuto entro 36 m.", "Luce Perenne*": "36 m • Permanente • sfera di luce di 18 m. Inverso: Tenebre Perenni.", "Parlare con i Morti": "3 m • 1 round/livello • permette domande a un morto entro i limiti di livello e tempo dalla morte.", "Scaccia Maledizioni*": "Contatto • Permanente • rimuove una maledizione. Inverso: Maledizione.", "Animare i Morti": "18 m • Permanente • anima scheletri e zombi; fino a 1 DV di non-morti per livello.", "Creare Acqua": "3 m • 6 turni • crea una sorgente d'acqua sufficiente per 12 persone per livello.", "Cura Ferite Gravi*": "Contatto • Permanente • cura 2d6+2 PF. Inverso: infligge 2d6+2 danni.", "Dissolvi Magie": "36 m • Permanente • distrugge gli effetti magici in un cubo di 6×6×6 m.", "Metamorfosi dei Bastoni in Serpenti": "36 m • 6 turni • trasforma 2-16 bastoni in serpenti, alcuni velenosi; obbediscono al chierico.", "Neutralizza Veleno*": "Contatto • Permanente • rende innocuo un veleno. Inverso: Crea Veleno.", "Parlare con le Piante": "0 • 3 turni • permette di parlare con le piante e influenzarle.", "Protezione dal Male nel raggio di 3 m": "0 • 12 turni • barriera di 6 m; +1 ai TS e -1 ai tiri per colpire delle creature incantate.", "Comando*": "9 m • Speciale • impone un comando. Inverso: Liberazione dal Comando.", "Comunicazione con gli Dei": "0 • 3 turni • pone 3 domande alla divinità con risposta sì/no entro i limiti indicati.", "Creare Cibo": "3 m • Permanente • crea cibo per 12 uomini e cavalcature per livello.", "Cura Ferite Critiche*": "Contatto • Permanente • cura 3d6+3 PF. Inverso: infligge 3d6+3 danni.", "Distruzione del Male": "9 m • 1 turno • distrugge o scaccia non-morti e creature malvagie nell'area.", "Resurrezione*": "36 m • Permanente • riporta in vita un umanoide entro i limiti del manuale. Inverso: Morte.", "Sciame di Insetti": "144 m • 1 giorno • evoca uno sciame che si muove nella direzione scelta.", "Vista Rivelante": "0 • 1 turno/livello • vede chiaramente oggetti nascosti, invisibili o eterei e rileva allineamento e livello/potere entro 36 m.", "Animare Oggetti": "18 m • 6 turni • anima oggetti; attacchi e danni dipendono da peso e decisione del DM.", "Barriera*": "18 m • 12 turni • barriera di martelli rotanti, 7-70 PF per attraversarla. Inverso: Rimozione di Barriera.", "Creare Animali Normali": "9 m • 10 turni • crea 1-6 animali fedeli al chierico.", "Guarigione": "Contatto • Permanente • cura completamente una creatura e può rimuovere vari effetti debilitanti.", "Individuazione della Corretta Via": "0 • 6 turni + 1 turno/livello • mostra la via verso un luogo indicato.", "Parlare con i Mostri*": "0 • 1 round/livello • conversazione con qualsiasi mostro entro 9 m. Inverso: Incantesimo di Babele.", "Parola Magica del Ritorno": "0 • Istantanea • teletrasporta il chierico e l'equipaggiamento al rifugio consacrato.", "Servo Fluttuante": "18 m • 1 giorno/livello • evoca un servitore umanoide intelligente per un compito; forza 18 e carico fino a 5.000 monete.", "Desiderio": "Speciale • Speciale • solo un chierico di 36° livello con almeno 18 in Saggezza; effetto deciso con il DM.", "Parola Sacra": "0 • Istantanea • colpisce le creature entro 12 m con effetti che dipendono dal loro livello/DV.", "Potere Magico": "0 • 1 turno • permette di usare pergamene o oggetti normalmente riservati ai maghi entro i limiti indicati.", "Resurrezione Integrale*": "18 m • Permanente • riporta in vita qualsiasi essere vivente entro le condizioni descritte. Inverso: Distruzione della Morte.", "Ristorazione*": "Contatto • Permanente • recupera un livello perduto per risucchio di energia. Inverso: Sottrai Vita.", "Sopravvivenza": "Contatto • 1 ora/livello • protegge dai danni ambientali e dalla mancanza d'aria.", "Terremoto": "110 m • 1 turno • provoca scosse telluriche, frane e danni alle strutture.", "Viaggiare": "0 • 1 turno/livello • permette volo e forma gassosa fino a 108 m, con i limiti indicati dal manuale."};
+function modifier(v){
+ v=Number(v); if(!Number.isFinite(v))return "";
+ if(v<=3)return "-3"; if(v<=5)return "-2"; if(v<=8)return "-1"; if(v<=12)return "0"; if(v<=15)return "+1"; if(v<=17)return "+2"; return "+3";
+}
+const clericXP=[0, 1500, 3000, 6000, 12000, 25000, 50000, 100000, 200000, 300000, 400000, 500000, 600000, 700000, 800000, 900000, 1000000, 1100000, 1200000, 1300000, 1400000, 1500000, 1600000, 1700000, 1800000, 1900000, 2000000, 2100000, 2200000, 2300000, 2400000, 2500000, 2600000, 2700000, 2800000, 2900000];
+const slots={"1": [0, 0, 0, 0, 0, 0, 0], "2": [1, 0, 0, 0, 0, 0, 0], "3": [2, 0, 0, 0, 0, 0, 0], "4": [2, 1, 0, 0, 0, 0, 0], "5": [2, 2, 0, 0, 0, 0, 0], "6": [2, 2, 1, 0, 0, 0, 0], "7": [3, 2, 2, 0, 0, 0, 0], "8": [3, 3, 2, 1, 0, 0, 0], "9": [3, 3, 3, 2, 0, 0, 0], "10": [4, 4, 3, 2, 1, 0, 0], "11": [4, 4, 3, 3, 2, 0, 0], "12": [4, 4, 4, 3, 2, 1, 0], "13": [5, 5, 4, 3, 2, 2, 0], "14": [5, 5, 5, 3, 3, 2, 0], "15": [6, 5, 5, 3, 3, 3, 0], "16": [6, 5, 5, 4, 4, 3, 1], "17": [6, 6, 5, 4, 4, 3, 1], "18": [6, 6, 5, 4, 4, 3, 2], "19": [7, 6, 5, 4, 4, 4, 2], "20": [7, 6, 5, 4, 4, 4, 3], "21": [7, 6, 5, 5, 5, 4, 3], "22": [7, 6, 5, 5, 5, 4, 4], "23": [7, 7, 6, 6, 5, 4, 4], "24": [8, 7, 6, 6, 5, 5, 4], "25": [8, 7, 6, 6, 5, 5, 5], "26": [8, 7, 7, 6, 6, 5, 5], "27": [8, 8, 7, 6, 6, 6, 5], "28": [8, 8, 7, 7, 7, 6, 5], "29": [8, 8, 7, 7, 7, 6, 6], "30": [8, 8, 8, 7, 7, 7, 6], "31": [8, 8, 8, 8, 8, 7, 6], "32": [9, 8, 8, 8, 8, 7, 7], "33": [9, 9, 8, 8, 8, 8, 7], "34": [9, 9, 9, 8, 8, 8, 8], "35": [9, 9, 9, 9, 9, 8, 8], "36": [9, 9, 9, 9, 9, 9, 9]};
+function updateXPFields(){
+ const level=Math.max(1,Math.min(36,Number(document.getElementById("livello").value)||1));
+ const xpNow=Math.max(0,Number(document.getElementById("xp").value)||0);
+ const next=level<36?clericXP[level]:null;
+ document.getElementById("nextlevel").value=level<36?(level+1)+"°":"—";
+ document.getElementById("nextxp").value=next===null?"—":next.toLocaleString("it-IT");
+ document.getElementById("xpmissing").value=next===null?"—":Math.max(0,next-xpNow).toLocaleString("it-IT");
+ updateClassTables();
+ if(document.getElementById("turnLevel"))buildTurn();
+ if(document.getElementById("spellcasterLevel")){document.getElementById("spellcasterLevel").value=level;buildLevels();}
+}
+function classBand(level){return level===36?9:Math.floor((level-1)/4);}
+const thacoByBand=[19,17,15,13,11,9,7,5,3,2];
+const saveTable=[[11,12,14,16,15],[9,10,12,14,13],[7,8,10,12,11],[6,7,8,10,9],[5,6,6,8,7],[4,5,5,6,5],[3,4,4,5,4],[2,3,3,4,3],[2,3,2,3,2]];
+function syncDexModifier(){
+ const d=document.getElementById("s-destrezza");const out=document.getElementById("cadex");
+ if(d&&out){const m=modifier(d.value);out.value=m===""?0:Number(m);updateCA();}
+}
+function updateClassTables(){
+ const level=Math.max(1,Math.min(36,Number(document.getElementById("livello").value)||1)); const band=classBand(level);
+ const t=document.getElementById("thaco");if(t){t.value=thacoByBand[band];t.readOnly=true;}
+ if(document.getElementById("thacoBody"))buildCombatThaco();
+ syncDexModifier();
+ ["save1","save2","save3","save4","save5"].forEach((id,i)=>{const e=document.getElementById(id);if(e){e.value=saveTable[band][i];e.readOnly=true;}});
+}
+function save(){
+ const d={};
+ document.querySelectorAll("input,textarea").forEach(e=>{if(e.id)d[e.id]=e.value;});
+ localStorage.setItem(key,JSON.stringify(d));
+}
+function load(){
+ try{const d=JSON.parse(localStorage.getItem(key)||"{}");Object.entries(d).forEach(([id,v])=>{const e=document.getElementById(id);if(e)e.value=v;});}catch(e){}
+}
+function buildStats(){
+ const box=document.getElementById("stats");box.innerHTML="";
+ statNames.forEach(id=>{
+  const div=document.createElement("div");div.className="stat";
+  div.innerHTML='<label>'+statLabels[id]+'</label><input id="s-'+id+'" class="score" type="number" min="3" max="18" value="10"><div class="mod" id="m-'+id+'">0</div>';
+  box.appendChild(div);
+  const input=div.querySelector("input");
+  const stored=localStorage.getItem(key+"_s_"+id); if(stored!==null)input.value=stored;
+  document.getElementById("m-"+id).textContent=modifier(input.value);
+  input.addEventListener("input",()=>{document.getElementById("m-"+id).textContent=modifier(input.value);localStorage.setItem(key+"_s_"+id,input.value);if(id==="destrezza")syncDexModifier();});
+ });
+}
+function buildCombatThaco(){
+ const t=Number(document.getElementById("thaco").value)||0;
+ const bonus=Number(document.getElementById("atkbonus").value)||0;
+ const body=document.getElementById("thacoBody");body.innerHTML="";
+ const r1=document.createElement("tr"),r2=document.createElement("tr");
+ const h1=document.createElement("th"),h2=document.createElement("th");
+ h1.textContent="CA";h2.textContent="Tiro";r1.appendChild(h1);r2.appendChild(h2);
+ for(let ca=-5;ca<=15;ca++){
+  const a=document.createElement("td"),b=document.createElement("td");
+  a.textContent=ca>0?"+"+ca:String(ca);
+  b.textContent=Math.min(20,Math.max(1,t-ca-bonus));
+  if(ca===0)b.className="highlight";
+  r1.appendChild(a);r2.appendChild(b);
+ }
+ body.appendChild(r1);body.appendChild(r2);
+}
+function buildThaco(){buildCombatThaco();}
+const turnRows=[
+ ["Scheletro","7","T","T","D","D","D","D","D","D+","D+","D+","D+","D+","D#","D#","D#"],
+ ["Zombi","9","7","T","T","D","D","D","D","D","D+","D+","D+","D+","D+","D+","D#","D#"],
+ ["Ghoul","11","9","7","T","T","D","D","D","D","D","D+","D+","D+","D+","D+","D+","D#"],
+ ["Spettro","—","11","9","7","T","T","D","D","D","D","D+","D+","D+","D+","D+","D+","D+"],
+ ["Presenza","—","—","11","9","7","T","T","D","D","D+","D+","D+","D+","D+","D+","D+","D+"],
+ ["Mummia","—","—","—","11","9","7","T","T","D","D","D+","D+","D+","D+","D+","D+","D+"],
+ ["Necrospettro","—","—","—","—","11","9","7","T","T","D","D+","D+","D+","D+","D+","D+","D+"],
+ ["Vampiro","—","—","—","—","—","11","9","7","T","T","D","D+","D+","D+","D+","D+","D+"],
+ ["Fantasma","—","—","—","—","—","—","11","9","7","T","T","D","D","D","D","D"],
+ ["Anima Persa","—","—","—","—","—","—","—","11","9","7","T","T","D","D","D"],
+ ["Spirito","—","—","—","—","—","—","—","—","11","9","7","T","T","D","D","D"],
+ ["Ombra","—","—","—","—","—","—","—","—","—","11","9","7","T","T","D","D"],
+ ["Lich","—","—","—","—","—","—","—","—","—","—","11","9","7","T","T","T","T"],
+ ["Speciali","—","—","—","—","—","—","—","—","—","—","—","11","9","7","T","T","T"]
+];
+function buildTurn(){
+ const lvl=Math.max(1,Math.min(36,Number(document.getElementById("livello").value)||1));
+ document.getElementById("turnLevel").value=lvl;
+ const band=lvl===1?0:lvl===2?1:lvl===3?2:lvl===4?3:lvl===5?4:lvl===6?5:lvl===7?6:lvl===8?7:lvl<=10?8:lvl<=12?9:lvl<=14?10:lvl<=16?11:lvl<=20?12:lvl<=24?13:lvl<=28?14:lvl<=32?15:16;
+ const body=document.getElementById("turnBody");body.innerHTML="";
+ turnRows.forEach(row=>{
+  const tr=document.createElement("tr");
+  row.forEach((v,i)=>{const cell=document.createElement(i===0?"th":"td");cell.textContent=v;if(i===band+1)cell.className="highlight";tr.appendChild(cell);});
+  body.appendChild(tr);
+ });
+}
+let currentSpellLevel=1;
+function getSpellState(){
+ let s={};
+ try{s=JSON.parse(localStorage.getItem(key+"_spellState")||"{}");}catch(e){s={};}
+ // Migrate the earlier preparation format if present.
+ if(!Object.keys(s).length){
+  try{
+   const old=JSON.parse(localStorage.getItem(key+"_prep")||"{}");
+   Object.keys(old).forEach(id=>{s[id]=old[id]===true?"prepared":(old[id]===false?"none":old[id]);});
+  }catch(e){}
+ }
+ // Normalize any legacy boolean states.
+ Object.keys(s).forEach(id=>{
+  if(s[id]===true)s[id]="prepared";
+  else if(s[id]===false)s[id]="none";
+  else if(!["none","prepared","used"].includes(s[id]))s[id]="none";
+ });
+ return s;
+}
+function saveSpellState(s){localStorage.setItem(key+"_spellState",JSON.stringify(s));}
+function buildLevels(){
+ const caster=Math.max(1,Math.min(36,Number(document.getElementById("livello").value)||1));const box=document.getElementById("levelButtons");box.innerHTML="";const available=slots[caster]||slots[1];
+ for(let l=1;l<=7;l++){const b=document.createElement("button");b.type="button";b.className="levelbtn"+(l===currentSpellLevel?" active":"");b.textContent=l+"°";const ok=Number(available[l-1]||0)>0;b.disabled=!ok;b.style.opacity=ok?"1":".38";b.onclick=()=>{currentSpellLevel=l;buildLevels();renderSpells();};box.appendChild(b);}
+ if(!(Number(available[currentSpellLevel-1]||0)>0)){const first=available.findIndex(x=>Number(x)>0);currentSpellLevel=first>=0?first+1:1;}renderSpells();}
+function getUsedSlots(lvl,max){
+ const manual=Math.max(0,Math.min(max,Number(localStorage.getItem(key+"_manualUsed_"+lvl)||0)));
+ return manual;
+}
+function setUsedSlots(lvl,max,value){
+ const v=Math.max(0,Math.min(max,Number(value)||0));
+ localStorage.setItem(key+"_manualUsed_"+lvl,String(v));
+ return v;
+}
+function consumeSpellSlot(lvl,max){
+ const used=getUsedSlots(lvl,max);
+ if(used>=max)return false;
+ setUsedSlots(lvl,max,used+1);
+ return true;
+}
+function renderSpells(){
+ const caster=Math.max(1,Math.min(36,Number(document.getElementById("livello").value)||1));
+ document.getElementById("spellcasterLevel").value=caster;
+ const available=slots[caster]||slots[1];
+ const state=getSpellState();
+
+ const summary=document.getElementById("preparedSummary");
+ summary.innerHTML="";
+ for(let lvl=1;lvl<=7;lvl++){
+  const max=Number(available[lvl-1]||0);
+  if(!max) continue;
+
+  const spellUsed=Object.keys(state).filter(k=>k.startsWith(lvl+"_")&&state[k]==="used").length;
+  const manualUsed=Math.max(0,Math.min(max,Number(localStorage.getItem(key+"_manualUsed_"+lvl)||0)));
+  const used=Math.max(spellUsed,manualUsed);
+  const prepared=Object.keys(state)
+    .filter(k=>k.startsWith(lvl+"_")&&state[k]==="prepared")
+    .map(k=>Number(k.split("_")[1]));
+
+  const row=document.createElement("div"); row.className="slotLevelRow";
+
+  const titleWrap=document.createElement("div"); titleWrap.className="slotLevelMain";
+  const title=document.createElement("div"); title.className="slotLevelName"; title.textContent=lvl+"° LIVELLO";
+  const prep=document.createElement("div"); prep.className="prepCount";
+  prep.textContent="Preparabili: "+max;
+  titleWrap.append(title,prep);
+
+  const dots=document.createElement("div"); dots.className="slotDots";
+  for(let i=0;i<max;i++){
+   const d=document.createElement("span");
+   d.className=i<used?"slotDotUsed":"slotDotFree";
+   d.textContent=i<used?"○":"●";
+   dots.appendChild(d);
+  }
+
+  const controls=document.createElement("div"); controls.className="slotControls";
+  const minus=document.createElement("button"); minus.type="button"; minus.className="slotBtn"; minus.textContent="−";
+  const status=document.createElement("div"); status.className="slotStatus "+(used>=max?"slotExhausted":"slotAvailable");
+  status.textContent=used>=max?"SLOT ESAURITI":(max-used)+" SLOT LIBERI";
+  const plus=document.createElement("button"); plus.type="button"; plus.className="slotBtn"; plus.textContent="+";
+
+  minus.title="Riduci di 1 lo slot disponibile di questo livello";
+  plus.title="Aggiungi 1 slot disponibile di questo livello";
+
+  minus.onclick=(e)=>{
+   e.stopPropagation();
+   const current=getUsedSlots(lvl,max);
+   if(current>=max) return;
+   setUsedSlots(lvl,max,current+1);
+   renderSpells();
+  };
+  plus.onclick=(e)=>{
+   e.stopPropagation();
+   const current=getUsedSlots(lvl,max);
+   if(current<=0) return;
+   setUsedSlots(lvl,max,current-1);
+   renderSpells();
+  };
+
+  controls.append(minus,status,plus);
+  row.append(titleWrap,dots,controls);
+  summary.appendChild(row);
+
+  if(prepared.length){
+   const names=document.createElement("div"); names.className="preparedNames";
+   prepared.forEach(idx=>{
+    const n=spells[lvl][idx]; if(!n) return;
+    const tag=document.createElement("span");
+    tag.className="preparedSpell";
+    tag.textContent=n;
+    tag.title=state[lvl+"_"+idx]==="used" ? "Slot già utilizzato" : "Tocca per lanciare";
+    if(state[lvl+"_"+idx]==="used") tag.style.opacity=".55";
+    tag.onclick=()=>{
+      const id=lvl+"_"+idx;
+      if(state[id]!=="prepared") return;
+      if(!consumeSpellSlot(lvl, max)) return;
+      renderSpells();
+    };
+    names.appendChild(tag);
+   });
+   summary.appendChild(names);
+  }
+ }
+
+ const list=document.getElementById("spellList");
+ list.innerHTML="";
+ const names=spells[currentSpellLevel]||[];
+ document.getElementById("spellFilter").textContent="Livello "+currentSpellLevel+" • "+names.length+" incantesimi";
+
+ names.forEach((name,idx)=>{
+  const id=currentSpellLevel+"_"+idx;
+  const st=state[id]||"none";
+  const d=document.createElement("div"); d.className="spell";
+
+  const nd=document.createElement("div");
+  nd.className="name "+(st==="used"?"usedSpell":(st==="prepared"?"preparedSpellName":""));
+  nd.textContent=name;
+  nd.title=st==="prepared"?"Tocca per lanciare e consumare uno slot":(st==="used"?"Slot già utilizzato":"Prepara prima l'incantesimo");
+  nd.onclick=()=>{
+   if(state[id]!=="prepared") return;
+   const max=Math.max(0,Number(available[currentSpellLevel-1]||0)+Number(localStorage.getItem(key+"_slotAdjust_"+currentSpellLevel)||0));
+   if(!consumeSpellSlot(currentSpellLevel, max)) return;
+   renderSpells();
+  };
+
+  const prep=document.createElement("button");
+  prep.type="button";
+  prep.className="switch "+(st==="none"?"notprep":"prep");
+  prep.textContent=st==="none"?"NON PREPARATO":"PREPARATO";
+  prep.onclick=(e)=>{
+   e.stopPropagation();
+   const current=state[id]||"none";
+   const preparable=Number(available[currentSpellLevel-1]||0);
+   const already=Object.keys(state).filter(k=>k.startsWith(currentSpellLevel+"_")&&state[k]==="prepared").length;
+   if(current==="none"){
+    if(already>=preparable) return;
+    state[id]="prepared";
+   }else if(current==="prepared"){
+    state[id]="none";
+   }
+   saveSpellState(state);
+   renderSpells();
+  };
+
+  const dd=document.createElement("div"); dd.className="desc";
+  const raw=(spellMeta[name]||desc[name]||"Consultare il manuale.").replace(/\\s+/g," ").trim();
+  const words=raw.split(" ");
+  let summary=raw;
+  // Keep the main description compact enough for the tablet; preserve all technical
+  // data on the dedicated line below.
+  if(words.length>60) summary=words.slice(0,60).join(" ")+"…";
+  const p=document.createElement("div"); p.className="spellSummary"; p.textContent=summary;
+  const tech=document.createElement("div"); tech.className="spellSave";
+  const save=spellSaves[name]||"TS: nessuno";
+  const meta=spellMeta[name]||"";
+  const techParts=[];
+  const gm=meta.match(/Gittata:[^•]+/i); if(gm) techParts.push(gm[0].trim());
+  const dm=meta.match(/Durata:[^•]+/i); if(dm) techParts.push(dm[0].trim());
+  techParts.push(save);
+  tech.textContent=techParts.join(" · ");
+  dd.append(p,tech);
+
+  d.append(nd,prep,dd);
+  list.appendChild(d);
+ });
+}
+window.buildWeapons=function(){
+ let weapons=[];try{weapons=JSON.parse(localStorage.getItem(key+"_weapons")||"[]");}catch(e){weapons=[];}
+ if(!Array.isArray(weapons)||!weapons.length){weapons=[{name:"",bonus:"",damage:"",note:""},{name:"",bonus:"",damage:"",note:""},{name:"",bonus:"",damage:"",note:""}];localStorage.setItem(key+"_weapons",JSON.stringify(weapons));}
+ const body=document.getElementById("weaponBody");body.innerHTML="";
+ weapons.forEach((w,i)=>{
+  const tr=document.createElement("tr");
+  ["name","bonus","damage","note"].forEach(k=>{
+   const td=document.createElement("td");
+   const inp=document.createElement(k==="note"?"textarea":"input");
+   inp.value=w[k]||"";inp.placeholder=k==="note"?"Poteri speciali, proprietà, note...":"";
+   if(k==="note"){inp.rows=2;inp.className="wrapNote";}
+   inp.addEventListener("input",()=>{weapons[i][k]=inp.value;localStorage.setItem(key+"_weapons",JSON.stringify(weapons));});
+   td.appendChild(inp);tr.appendChild(td);
+  });
+  body.appendChild(tr);
+ });
+}
+window.buildProtection=function(){
+ let rows=[];try{rows=JSON.parse(localStorage.getItem(key+"_protection")||"[]");}catch(e){rows=[];}
+ if(!Array.isArray(rows)||!rows.length){rows=[{name:"",bonus:"",note:""},{name:"",bonus:"",note:""},{name:"",bonus:"",note:""}];localStorage.setItem(key+"_protection",JSON.stringify(rows));}
+ const body=document.getElementById("protectionBody");body.innerHTML="";
+ rows.forEach((r,i)=>{
+  const tr=document.createElement("tr");
+  ["name","bonus","note"].forEach(k=>{
+   const td=document.createElement("td");
+   const inp=document.createElement(k==="note"?"textarea":"input");
+   inp.value=r[k]||"";inp.placeholder=k==="bonus"?"Es. -1":"Descrizione / note...";
+   if(k==="note"){inp.rows=2;inp.className="wrapNote";}
+   inp.addEventListener("input",()=>{rows[i][k]=inp.value;localStorage.setItem(key+"_protection",JSON.stringify(rows));updateCA();});
+   td.appendChild(inp);tr.appendChild(td);
+  });
+  body.appendChild(tr);
+ });
+};
+window.updateCA=function(){
+ const base=Number(document.getElementById("cabase").value);
+ const armor=Number(document.getElementById("armaturaMod").value)||0;
+ const shield=Number(document.getElementById("scudoMod").value)||0;
+ const dex=Number(document.getElementById("cadex").value)||0;
+ const other=Number(document.getElementById("caaltro").value)||0;
+ let objectBonus=0,rows=[];
+ try{rows=JSON.parse(localStorage.getItem(key+"_protection")||"[]");}catch(e){rows=[];}
+ if(Array.isArray(rows))rows.forEach(r=>{
+  const v=Number(String(r.bonus||"").replace(",",".").replace("+",""));
+  if(Number.isFinite(v))objectBonus+=v;
+ });
+ document.getElementById("cafinale").value=Number.isFinite(base)?base+armor+shield+dex+other+objectBonus:"";
+};
+function buildGear(){
+ let gear=[];try{gear=JSON.parse(localStorage.getItem(key+"_gear")||"[]");}catch(e){gear=[];}
+ if(!Array.isArray(gear)||!gear.length){gear=[{n:"",q:"1",p:"",note:""},{n:"",q:"1",p:"",note:""},{n:"",q:"1",p:"",note:""}];localStorage.setItem(key+"_gear",JSON.stringify(gear));}
+ const body=document.getElementById("gearBody");body.innerHTML="";
+ gear.forEach((g,i)=>{
+  const tr=document.createElement("tr");
+  ["n","q","p","note"].forEach(k=>{
+   const td=document.createElement("td");
+   const inp=document.createElement(k==="note"?"textarea":"input");
+   inp.value=g[k]||"";inp.placeholder=k==="p"?"Peso/ingombro":"";
+   if(k==="note"){inp.rows=2;inp.className="wrapNote";}
+   inp.addEventListener("input",()=>{gear[i][k]=inp.value;localStorage.setItem(key+"_gear",JSON.stringify(gear));});
+   td.appendChild(inp);tr.appendChild(td);
+  });
+  body.appendChild(tr);
+ });
+}
+function showTab(id){
+ document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.dataset.tab===id));
+ document.querySelectorAll(".screen").forEach(s=>s.classList.toggle("active",s.id===id));
+ if(id==="incantesimi"){buildLevels();renderSpells();}
+ if(id==="inventario")buildGear();
+ window.scrollTo(0,0);
+}
+function initControls(){
+ document.querySelector(".tabs").addEventListener("click",e=>{
+  const b=e.target.closest(".tab");
+  if(b){e.preventDefault();showTab(b.dataset.tab);}
+ });
+ document.querySelectorAll("input,textarea").forEach(e=>e.addEventListener("input",()=>{
+  save();
+  if(e.id==="thaco"||e.id==="atkbonus")buildCombatThaco();
+  if(e.id==="turnLevel")buildTurn();
+  if(e.id==="livello"||e.id==="xp"){updateXPFields();buildTurn();}
+ }));
+ document.getElementById("spellcasterLevel").addEventListener("input",renderSpells);
+ document.getElementById("addGear").addEventListener("click",()=>{
+  let g=[];try{g=JSON.parse(localStorage.getItem(key+"_gear")||"[]");}catch(e){}
+  if(!Array.isArray(g))g=[];g.push({n:"",q:"1",p:"",note:""});
+  localStorage.setItem(key+"_gear",JSON.stringify(g));buildGear();
+ });
+ document.getElementById("removeGear").addEventListener("click",()=>{
+  let g=[];try{g=JSON.parse(localStorage.getItem(key+"_gear")||"[]");}catch(e){}
+  if(g.length>1)g.pop();localStorage.setItem(key+"_gear",JSON.stringify(g));buildGear();
+ });
+ document.getElementById("addProtection").addEventListener("click",()=>{
+  let rows=[];try{rows=JSON.parse(localStorage.getItem(key+"_protection")||"[]");}catch(e){}
+  if(!Array.isArray(rows))rows=[];rows.push({name:"",bonus:"",note:""});
+  localStorage.setItem(key+"_protection",JSON.stringify(rows));buildProtection();updateCA();
+ });
+ document.getElementById("removeProtection").addEventListener("click",()=>{
+  let rows=[];try{rows=JSON.parse(localStorage.getItem(key+"_protection")||"[]");}catch(e){}
+  if(rows.length>1)rows.pop();localStorage.setItem(key+"_protection",JSON.stringify(rows));buildProtection();updateCA();
+ });
+ document.getElementById("hpplus").addEventListener("click",()=>{
+  const p=document.getElementById("pf"),m=Number(document.getElementById("pfmax").value)||0;
+  p.value=Math.min(m,Number(p.value||0)+1);save();
+ });
+ document.getElementById("hpminus").addEventListener("click",()=>{
+  const p=document.getElementById("pf");p.value=Math.max(0,Number(p.value||0)-1);save();
+ });
+ document.getElementById("addWeapon").addEventListener("click",()=>{
+  let w=[];try{w=JSON.parse(localStorage.getItem(key+"_weapons")||"[]");}catch(e){}
+  if(!Array.isArray(w))w=[];w.push({name:"",bonus:"",damage:"",note:""});
+  localStorage.setItem(key+"_weapons",JSON.stringify(w));buildWeapons();
+ });
+ document.getElementById("removeWeapon").addEventListener("click",()=>{
+  let w=[];try{w=JSON.parse(localStorage.getItem(key+"_weapons")||"[]");}catch(e){}
+  if(w.length>1)w.pop();localStorage.setItem(key+"_weapons",JSON.stringify(w));buildWeapons();
+ });
+ ["cabase","armaturaMod","scudoMod","cadex","caaltro"].forEach(id=>document.getElementById(id).addEventListener("input",updateCA));
+ document.getElementById("pfmax").addEventListener("input",()=>{
+  const max=Math.max(0,Number(pfmax.value)||0);
+  pf.value=Math.min(max,Math.max(0,Number(pf.value)||0));save();
+ });
+ document.getElementById("longRest").addEventListener("click",e=>{
+  e.preventDefault();
+  for(let lvl=1;lvl<=7;lvl++)localStorage.setItem(key+"_manualUsed_"+lvl,"0");
+  renderSpells();
+ });
+}
+
+load();
+buildStats();
+updateXPFields();
+buildCombatThaco();
+buildTurn();
+buildLevels();
+buildGear();
+buildWeapons();
+buildProtection();
+updateCA();
+initControls();
+showTab("personaggio");
+</script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js").catch(() => {});
+  });
+}
+</script>
+
+</body>
+</html>
