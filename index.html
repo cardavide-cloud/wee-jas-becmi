@@ -1177,96 +1177,6 @@ table.thaco#thacoTable th:first-child{
 }
 </style>
 
-
-<style id="beta-notes-wrap-fix">
-/* ===== NOTE E DESCRIZIONI — testo sempre leggibile ===== */
-textarea,
-.notearea,
-#protectionTable input,
-#weaponsTable input,
-#gearBody input,
-#protectionTable textarea,
-#weaponsTable textarea,
-#gearBody textarea{
-  white-space:pre-wrap !important;
-  overflow-wrap:anywhere !important;
-  word-break:break-word !important;
-  text-overflow:clip !important;
-}
-
-/* Le colonne Note/Descrizione devono avere spazio sufficiente */
-#protectionTable td:nth-child(3),
-#weaponsTable td:nth-child(4),
-#gearBody td:nth-child(4){
-  white-space:normal !important;
-  overflow-wrap:anywhere !important;
-  word-break:break-word !important;
-}
-
-/* Per i testi lunghi, altezza minima e testo disposto su più righe */
-#protectionTable td:nth-child(3) input,
-#weaponsTable td:nth-child(4) input,
-#gearBody td:nth-child(4) input{
-  min-height:38px !important;
-  height:auto !important;
-  white-space:normal !important;
-  overflow:visible !important;
-  line-height:1.25 !important;
-  text-align:left !important;
-}
-
-/* Tutte le descrizioni delle spell vanno a capo naturalmente */
-.spell .desc,
-.spellMeta,
-.tiny,
-.faithPanel,
-#protectionTable,
-#weaponsTable,
-#gearBody{
-  overflow-wrap:anywhere !important;
-  word-break:normal !important;
-  white-space:normal !important;
-}
-
-/* Le note lunghe sono volutamente allineate a sinistra per la leggibilità */
-.notearea{
-  text-align:left !important;
-  white-space:pre-wrap !important;
-  overflow-wrap:anywhere !important;
-  line-height:1.35 !important;
-}
-</style>
-
-
-<style id="beta-real-wrap">
-.wrapNote,
-#protectionTable textarea,
-#weaponsTable textarea,
-#gearBody textarea{
-  width:100%!important;
-  min-height:42px!important;
-  box-sizing:border-box!important;
-  resize:vertical!important;
-  white-space:pre-wrap!important;
-  overflow-wrap:anywhere!important;
-  word-break:break-word!important;
-  overflow-x:hidden!important;
-  line-height:1.25!important;
-  text-align:left!important;
-}
-#protectionTable td:nth-child(3),
-#weaponsTable td:nth-child(4),
-#gearBody td:nth-child(4){
-  white-space:normal!important;
-  overflow:visible!important;
-  vertical-align:middle!important;
-}
-</style>
-
-<link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#080908">
-<meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
-<link rel="apple-touch-icon" href="icon.svg">
 </head>
 <body>
 <div class="app">
@@ -1363,23 +1273,23 @@ textarea,
  <div class="section">✦ PROTEZIONE ✦</div>
 
 <div class="protectionSummary">
-  <div class="field"><label>CA BASE</label><input id="cabase" type="number" value="9"></div>
-  <div class="field"><label>Modificatore DES</label><input id="cadex" type="number" value="0"><div class="tiny">Non modifica la CA</div></div>
+  <div class="field"><label>CA BASE</label><input id="cabase" type="text" inputmode="text" value="9" placeholder="Es. -1"></div>
+  <div class="field"><label>Modificatore DES</label><input id="cadex" type="text" inputmode="text" value="0" placeholder="Es. +1 / -1" readonly></div>
   <div class="field"><label>CA FINALE</label><input id="cafinale" readonly></div>
 </div>
 
 <div class="protectionGrid">
   <div class="field"><label>Armatura</label><input id="armatura" placeholder="Es. Cotta di maglia"></div>
-  <div class="field"><label>Modificatore CA</label><input id="armaturaMod" type="number" value="0" placeholder="Es. -4"></div>
+  <div class="field"><label>Modificatore CA</label><input id="armaturaMod" type="text" inputmode="text" value="0" placeholder="Es. -4"></div>
   <div class="field"><label>Scudo</label><input id="scudo" placeholder="Es. Scudo"></div>
-  <div class="field"><label>Modificatore CA</label><input id="scudoMod" type="number" value="0" placeholder="Es. -1"></div>
-  <div class="field"><label>Altri bonus / malus CA</label><input id="caaltro" type="number" value="0"></div>
+  <div class="field"><label>Modificatore CA</label><input id="scudoMod" type="text" inputmode="text" value="0" placeholder="Es. -1"></div>
   <div class="field"><label>Descrizione</label><input id="caaltroNote" placeholder="Es. anello +1"></div>
+  <div class="field"><label>Altri bonus / malus CA</label><input id="caaltro" type="text" inputmode="text" value="0" placeholder="Es. -1"></div>
 </div>
 
-<div class="tiny">La CA finale parte dalla CA base e applica armatura, scudo, Destrezza e altri bonus/malus. Una CA più bassa è migliore.</div>
+<div class="tiny">CA più bassa = migliore. Armatura, scudo e altri effetti che migliorano la CA si inseriscono con valore negativo (es. -1). Il modificatore DES viene applicato automaticamente: DES +1 = -1 alla CA finale.</div>
 <table class="equip" id="protectionTable">
-  <thead><tr><th>Oggetto / Effetto</th><th>Bonus / Malus CA</th><th>Descrizione / Note</th></tr></thead>
+  <thead><tr><th>Oggetto / Effetto</th><th>Descrizione / Note</th><th>Bonus / Malus CA</th></tr></thead>
   <tbody id="protectionBody"></tbody>
  </table>
  <div style="display:flex;gap:7px;flex-wrap:wrap">
@@ -1768,10 +1678,8 @@ window.buildWeapons=function(){
  weapons.forEach((w,i)=>{
   const tr=document.createElement("tr");
   ["name","bonus","damage","note"].forEach(k=>{
-   const td=document.createElement("td");
-   const inp=document.createElement(k==="note"?"textarea":"input");
+   const td=document.createElement("td"),inp=document.createElement("input");
    inp.value=w[k]||"";inp.placeholder=k==="note"?"Poteri speciali, proprietà, note...":"";
-   if(k==="note"){inp.rows=2;inp.className="wrapNote";}
    inp.addEventListener("input",()=>{weapons[i][k]=inp.value;localStorage.setItem(key+"_weapons",JSON.stringify(weapons));});
    td.appendChild(inp);tr.appendChild(td);
   });
@@ -1784,11 +1692,11 @@ window.buildProtection=function(){
  const body=document.getElementById("protectionBody");body.innerHTML="";
  rows.forEach((r,i)=>{
   const tr=document.createElement("tr");
-  ["name","bonus","note"].forEach(k=>{
-   const td=document.createElement("td");
-   const inp=document.createElement(k==="note"?"textarea":"input");
-   inp.value=r[k]||"";inp.placeholder=k==="bonus"?"Es. -1":"Descrizione / note...";
-   if(k==="note"){inp.rows=2;inp.className="wrapNote";}
+  ["name","note","bonus"].forEach(k=>{
+   const td=document.createElement("td"),inp=document.createElement("input");
+   inp.value=r[k]||"";
+   if(k==="bonus"){inp.type="text";inp.inputMode="text";inp.placeholder="Es. -1";inp.setAttribute("aria-label","Bonus o malus CA");}
+   else if(k==="note"){inp.placeholder="Descrizione / note...";}
    inp.addEventListener("input",()=>{rows[i][k]=inp.value;localStorage.setItem(key+"_protection",JSON.stringify(rows));updateCA();});
    td.appendChild(inp);tr.appendChild(td);
   });
@@ -1807,7 +1715,7 @@ window.updateCA=function(){
   const v=Number(String(r.bonus||"").replace(",",".").replace("+",""));
   if(Number.isFinite(v))objectBonus+=v;
  });
- document.getElementById("cafinale").value=Number.isFinite(base)?base+armor+shield+dex+other+objectBonus:"";
+ document.getElementById("cafinale").value=Number.isFinite(base)?base+armor+shield-dex+other+objectBonus:"";
 };
 function buildGear(){
  let gear=[];try{gear=JSON.parse(localStorage.getItem(key+"_gear")||"[]");}catch(e){gear=[];}
@@ -1816,10 +1724,8 @@ function buildGear(){
  gear.forEach((g,i)=>{
   const tr=document.createElement("tr");
   ["n","q","p","note"].forEach(k=>{
-   const td=document.createElement("td");
-   const inp=document.createElement(k==="note"?"textarea":"input");
+   const td=document.createElement("td"),inp=document.createElement("input");
    inp.value=g[k]||"";inp.placeholder=k==="p"?"Peso/ingombro":"";
-   if(k==="note"){inp.rows=2;inp.className="wrapNote";}
    inp.addEventListener("input",()=>{gear[i][k]=inp.value;localStorage.setItem(key+"_gear",JSON.stringify(gear));});
    td.appendChild(inp);tr.appendChild(td);
   });
@@ -1879,7 +1785,7 @@ function initControls(){
   let w=[];try{w=JSON.parse(localStorage.getItem(key+"_weapons")||"[]");}catch(e){}
   if(w.length>1)w.pop();localStorage.setItem(key+"_weapons",JSON.stringify(w));buildWeapons();
  });
- ["cabase","armaturaMod","scudoMod","cadex","caaltro"].forEach(id=>document.getElementById(id).addEventListener("input",updateCA));
+ ["cabase","armaturaMod","scudoMod","caaltro"].forEach(id=>document.getElementById(id).addEventListener("input",updateCA));
  document.getElementById("pfmax").addEventListener("input",()=>{
   const max=Math.max(0,Number(pfmax.value)||0);
   pf.value=Math.min(max,Math.max(0,Number(pf.value)||0));save();
@@ -1904,14 +1810,5 @@ updateCA();
 initControls();
 showTab("personaggio");
 </script>
-
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./sw.js").catch(() => {});
-  });
-}
-</script>
-
 </body>
 </html>
