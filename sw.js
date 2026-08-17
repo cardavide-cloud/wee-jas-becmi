@@ -1,4 +1,4 @@
-const CACHE_NAME = "wee-jas-becmi-beta-v1";
+const CACHE_NAME = "wee-jas-becmi-beta-v2";
 const ASSETS = [
   "./",
   "./index.html",
